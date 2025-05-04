@@ -23,13 +23,13 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Common.Application", "Commo
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Common.AspNetCore", "Common\Common.AspNetCore\Common.AspNetCore.csproj", "{8F36AD36-CA7A-401B-ABF9-3EF0BE14537E}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Shop.Config", "Shop\Shop.Config\Shop.Config.csproj", "{9FB02481-2778-4A98-BCE4-2523209C2C19}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Shop.Config", "Shop\Shop.Config\Shop.Config.csproj", "{9FB02481-2778-4A98-BCE4-2523209C2C19}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "EndPoint", "EndPoint", "{A4DD2EB3-ABA8-4738-BC6C-6E593EA12EBD}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Shop.Api", "Shop\Shop.Api\Shop.Api.csproj", "{BC02E1B8-8ABF-4642-9333-E0A16B48CD98}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Shop.Api", "Shop\Shop.Api\Shop.Api.csproj", "{BC02E1B8-8ABF-4642-9333-E0A16B48CD98}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Common.Query", "Common\Common.Query\Common.Query.csproj", "{AD33E39C-6C86-40D3-B622-F9232256BC0C}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Common.Query", "Common\Common.Query\Common.Query.csproj", "{AD33E39C-6C86-40D3-B622-F9232256BC0C}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
