@@ -23,7 +23,8 @@ public class ProductConfiguration:IEntityTypeConfiguration<Product>
 
         builder.Property(b => b.Slug)
             .IsRequired()
-            .IsUnicode(false);
+            .IsUnicode(false)
+            .HasMaxLength(500);
 
         builder.OwnsOne(b => b.SeoData, config =>
         {
@@ -74,42 +75,43 @@ public class ProductConfiguration:IEntityTypeConfiguration<Product>
                 .HasMaxLength(100);
         });
 
-        builder.HasMany(b => b.Inventories)
-          .WithOne()
-          .HasForeignKey("ProductId")
-          .OnDelete(DeleteBehavior.Cascade);
+        builder.HasMany(p => p.ProductVariants)
+                 .WithOne()
+                 .HasForeignKey("ProductId");
 
     }
 }
-public class ProductInventoryConfiguration : IEntityTypeConfiguration<ProductInventory>
+public class ProductVariantConfiguration : IEntityTypeConfiguration<ProductVariant>
 {
-    public void Configure(EntityTypeBuilder<ProductInventory> builder)
+    public void Configure(EntityTypeBuilder<ProductVariant> builder)
     {
-        builder.ToTable("ProductInventories", "product");
+        builder.ToTable("ProductVariants");
 
-        builder.HasMany(i => i.InventoryItems)
-            .WithOne()
-            .HasForeignKey(ii => ii.ProductId)
-            .OnDelete(DeleteBehavior.Cascade);
-    }
-}
+        builder.HasKey(v => v.Id);
 
-public class ProductInventoryItemConfiguration : IEntityTypeConfiguration<ProductInventoryItem>
-{
-    public void Configure(EntityTypeBuilder<ProductInventoryItem> builder)
-    {
-        builder.ToTable("ProductInventoryItems", "product");
+        builder.Property(v => v.SKU)
+               .IsRequired()
+               .HasMaxLength(100);
 
-        builder.Property(pii => pii.Color)
-            .HasMaxLength(100);
+        builder.HasIndex(v => v.SKU).IsUnique();
 
-        builder.Property(pii => pii.StockQuantity)
-            .IsRequired();
+        builder.Property(v => v.Color)
+               .HasMaxLength(50);
 
-        builder.Property(pii => pii.Price)
-            .IsRequired()
-            .HasColumnType("decimal(18,2)");
+        builder.Property(v => v.Size)
+               .HasMaxLength(50);
 
-        builder.Property(pii => pii.DiscountPercentage);
+        builder.Property(v => v.StockQuantity)
+               .IsRequired();
+
+        builder.Property(v => v.Price)
+               .IsRequired();
+
+        builder.Property(v => v.DiscountPercentage)
+               .IsRequired(false);
+
+        builder.HasOne(v => v.Product)
+               .WithMany(p => p.ProductVariants)
+               .HasForeignKey(v => v.ProductId);
     }
 }

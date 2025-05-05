@@ -17,7 +17,7 @@ internal class OrderConfiguration : IEntityTypeConfiguration<Order>
         {
             option.ToTable("Items", "order");
             option.HasKey(b => b.Id);
-            option.HasIndex(b => b.InventoryId);
+            option.HasIndex(b => b.ProductVariantId);
             option.HasIndex(b => b.OrderId);
         });
 

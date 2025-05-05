@@ -1,6 +1,7 @@
 ﻿using Common.Domain;
 using MediatR;
 using Microsoft.EntityFrameworkCore;
+using Shop.Domain.Auth.OTP;
 using Shop.Domain.CategoryAgg;
 using Shop.Domain.CommentAgg;
 using Shop.Domain.OrderAgg;
@@ -31,6 +32,7 @@ public class ShopContext : DbContext
     public DbSet<User> Users { get; set; }
     public DbSet<SupportTicketAgg> SupportTickets { get; set; }
     public DbSet<ShippingMethod> ShippingMethods { get; set; }
+    public DbSet<Otp> OTP { get; set; }
 
     public override async Task<int> SaveChangesAsync(CancellationToken cancellationToken = new CancellationToken())
     {
