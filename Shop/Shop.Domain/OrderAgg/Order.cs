@@ -52,7 +52,7 @@ namespace Shop.Domain.OrderAgg
         {
             ChangeOrderGuard();
 
-            var oldItem = Items.FirstOrDefault(f => f.InventoryId == item.InventoryId);
+            var oldItem = Items.FirstOrDefault(f => f.ProductVariantId == item.ProductVariantId);
             if (oldItem != null)
             {
                 oldItem.ChangeCount(item.Count + oldItem.Count);

@@ -2,6 +2,7 @@
 using Common.Domain.Exceptions;
 using Shop.Domain.ProductAgg.Services;
 using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -30,9 +31,29 @@ namespace Shop.Domain.ProductAgg
             SetFields(productId, color, size, stockQuantity, price, discountPercentage, sku,  domainService);
         }
 
-        public void Edit(string? color, string? size, int stockQuantity, decimal price, int? discountPercentage, string sku, IProductDomainService domainService)
+        public void Edit(string? color, string? size, int? stockQuantity, decimal? price, int? discountPercentage, string? sku, IProductDomainService domainService)
         {
-            SetFields(ProductId, color, size, stockQuantity, price, discountPercentage , sku,  domainService);
+                if (!string.IsNullOrWhiteSpace(color))
+                    Color = color;
+
+                if (!string.IsNullOrWhiteSpace(size))
+                    Size = size;
+
+                if (stockQuantity.HasValue)
+                StockQuantity = stockQuantity.Value;
+
+                if (price.HasValue)
+                    Price = price.Value;
+
+                DiscountPercentage = discountPercentage;
+
+            if (!string.IsNullOrWhiteSpace(sku) && sku != SKU)
+            {
+                if (domainService.SKUIsExist(sku.Trim().ToUpperInvariant(), ProductId))
+                    throw new InvalidDomainDataException("SKU تکراری است");
+                SKU = sku.Trim().ToUpperInvariant();
+            }
+
         }
 
         private void SetFields(long productId, string? color, string? size, int stockQuantity, decimal price, int? discountPercentage, string sku, IProductDomainService domainService)

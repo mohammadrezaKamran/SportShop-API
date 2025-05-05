@@ -1,4 +1,5 @@
 ﻿using Common.Application;
+using Shop.Application.Products.Create;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -7,13 +8,14 @@ using System.Threading.Tasks;
 
 namespace Shop.Application.Products.ProductVariant.AddProductVariant
 {
-    public class AddProductVariant:IBaseCommand
+    public class AddProductVariant : IBaseCommand
     {
-        public long ProductId { get; private set; }
-        public string? Color { get; private set; }
-        public int? Weight { get; private set; }
-        public int StockQuantity { get; private set; }
-        public decimal Price { get; private set; }
-        public int? DiscountPercentage { get; private set; }
+        public long ProductId { get;  set; }
+        public string SKU { get;  set; }
+        public string? Color { get;  set; }
+        public string? Size { get;  set; }
+        public int StockQuantity { get;  set; }
+        public decimal Price { get;  set; }
+        public int? DiscountPercentage { get;  set; }
     }
 }

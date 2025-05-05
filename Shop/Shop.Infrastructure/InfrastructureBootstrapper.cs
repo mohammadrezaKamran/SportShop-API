@@ -1,4 +1,5 @@
-﻿using Microsoft.EntityFrameworkCore;
+﻿using Common.Application.Validation;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
 using Shop.Domain.CategoryAgg;
 using Shop.Domain.CommentAgg;
@@ -19,6 +20,7 @@ using Shop.Infrastructure.Persistent.Ef.RoleAgg;
 using Shop.Infrastructure.Persistent.Ef.SiteEntities.Repositories;
 using Shop.Infrastructure.Persistent.Ef.SupportTicket;
 using Shop.Infrastructure.Persistent.Ef.UserAgg;
+using Shop.Infrastructure.Services.Sms;
 
 namespace Shop.Infrastructure
 {
@@ -38,6 +40,7 @@ namespace Shop.Infrastructure
             services.AddTransient<IShippingMethodRepository, ShippingMethodRepository>();
 
             services.AddSingleton<ICustomPublisher, CustomPublisher>();
+            services.AddScoped<ISmsSender,KaveNegarSmsSender>();
 
             services.AddTransient(_ => new DapperContext(connectionString));
             services.AddDbContext<ShopContext>(option =>

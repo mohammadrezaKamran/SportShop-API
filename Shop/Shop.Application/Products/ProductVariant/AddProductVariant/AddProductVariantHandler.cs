@@ -1,8 +1,6 @@
 ﻿using Common.Application;
-using Shop.Domain.ProductAgg;
 using Shop.Domain.ProductAgg.Repository;
 using Shop.Domain.ProductAgg.Services;
-using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -13,18 +11,34 @@ namespace Shop.Application.Products.ProductVariant.AddProductVariant
     public class AddProductVariantHandler : IBaseCommandHandler<AddProductVariant>
     {
         private readonly IProductRepository _repository;
+        private readonly IProductDomainService _domainService;
 
-        public AddProductVariantHandler(IProductRepository repository)
+        public AddProductVariantHandler(IProductRepository repository, IProductDomainService domainService)
         {
             _repository = repository;
+            _domainService = domainService;
         }
 
-        public Task<OperationResult> Handle(AddProductVariant request, CancellationToken cancellationToken)
+        public async Task<OperationResult> Handle(AddProductVariant request, CancellationToken cancellationToken)
         {
-            var product=_repository.Get(request.ProductId);
+            var product = await _repository.GetAsync(request.ProductId);
             if (product == null)
-                return null;
-            product.AddVariant(new Domain.ProductAgg.ProductVariant() { });
+                return OperationResult.NotFound();
+
+            var variant = new Domain.ProductAgg.ProductVariant(
+            request.ProductId,
+            request.Color,
+            request.Size,
+            request.StockQuantity,
+            request.Price,
+            request.DiscountPercentage,
+            request.SKU,
+            _domainService);
+
+            product.AddVariant(variant);
+
+            await _repository.Save();
+            return OperationResult.Success();
         }
     }
 }

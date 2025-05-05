@@ -9,6 +9,6 @@ namespace Shop.Domain.ProductAgg.Repository
 {
     public interface IProductRepository:IBaseRepository<Product>
     {
-        
+        Task<ProductVariant?> GetVariantById(long variantId);
     }
 }

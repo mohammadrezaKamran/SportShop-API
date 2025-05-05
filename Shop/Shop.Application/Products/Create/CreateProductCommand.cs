@@ -1,6 +1,7 @@
 ﻿using Common.Application;
 using Common.Domain.ValueObjects;
 using Microsoft.AspNetCore.Http;
+using Shop.Domain.ProductAgg;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -19,8 +20,9 @@ namespace Shop.Application.Products.Create
         public long SecondarySubCategoryId { get; set;}
         public string Slug { get; set;}
         public SeoData SeoData { get; set;}
-        public List<string> ColorHex { get; set;}
         public string BrandName { get; set; }
+        public ProductStatus Status { get; set; }
         public Dictionary<string, string> Specifications { get; set;}
     }
 }
+

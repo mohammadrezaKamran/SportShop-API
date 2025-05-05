@@ -29,7 +29,7 @@ namespace Shop.Domain.UserAgg
             Password = password;
             Gender = gender;
             AvatarName = "avatar.png";
-            IsPhoneNumberVerified = true;
+            IsPhoneNumberVerified = false;
             Roles = new();
             Wallets = new();
             Tokens = new();
@@ -41,7 +41,7 @@ namespace Shop.Domain.UserAgg
         public string Email { get; private set; }
         public string Password { get; private set; }
         public string AvatarName { get; set; }
-        public bool IsPhoneNumberVerified { get; set; } = true;
+        public bool IsPhoneNumberVerified { get; set; }
 
         public Gender Gender { get; private set; }
         public List<UserRole> Roles { get; }
@@ -169,13 +169,12 @@ namespace Shop.Domain.UserAgg
             WishLists.Add(new WishList(productId));
         }
 
-        ////public void VerifyPhoneNumber()
-        ////{
-        ////    if (IsPhoneNumberVerified)
-        ////        throw new InvalidOperationException("شماره تلفن قبلا ثبت شده است");
-        ////    IsPhoneNumberVerified = true;
-        ////    AddDomainEvent();
-        ////}
+        public void VerifyPhoneNumber()
+        {
+            if (IsPhoneNumberVerified)
+                throw new InvalidOperationException("شماره تلفن قبلا ثبت شده است");
+            IsPhoneNumberVerified = true;
+        }
 
         public void Guard(string phoneNumber, string email, IUserDomainService userDomainService)
         {

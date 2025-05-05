@@ -5,18 +5,18 @@ namespace Shop.Domain.OrderAgg
 {
     public class OrderItem : BaseEntity
     {
-        public OrderItem(long inventoryId, int count, decimal price)
+        public OrderItem(long productVariantId, int count, decimal price)
         {
             PriceGuard(price);
             CountGuard(count);
 
-            InventoryId = inventoryId;
+            ProductVariantId = productVariantId;
             Count = count;
             Price = price;
         }
 
         public long OrderId { get; internal set; }
-        public long InventoryId { get; private set; }
+        public long ProductVariantId { get; private set; }
         public int Count { get; private set; }
         public decimal Price { get; private set; }
         public decimal TotalPrice => (Int32)Price * Count;

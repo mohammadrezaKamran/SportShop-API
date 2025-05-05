@@ -2,6 +2,7 @@
 using Shop.Domain.ProductAgg;
 using Shop.Domain.ProductAgg.Repository;
 using Shop.Infrastructure._Utilities;
+using System;
 
 namespace Shop.Infrastructure.Persistent.Ef.ProductAgg;
 
@@ -11,16 +12,13 @@ public class ProductRepository : BaseRepository<Product>, IProductRepository
     {
     }
 
-    public void Delete(Product product)
-    {     
-        if (product != null)
-        {
-            Context.Remove(product);
-        }
+    public async Task<ProductVariant?> GetVariantById(long variantId)
+    {
+        var product = await Context.Products
+     .Include(p => p.ProductVariants)
+     .FirstOrDefaultAsync(p => p.ProductVariants.Any(v => v.Id == variantId));
+
+        return product?.ProductVariants.FirstOrDefault(v => v.Id == variantId);
     }
 
-    async Task<ProductInventory?> IProductRepository.GetInventoryById(long id)
-    {
-     return await Context.Products.SelectMany(p=>p.Inventories).FirstOrDefaultAsync(i=>i.Id==id);
-    }
 }

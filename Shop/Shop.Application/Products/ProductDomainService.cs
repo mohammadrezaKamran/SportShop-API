@@ -12,6 +12,11 @@ public class ProductDomainService:IProductDomainService
         _repository = repository;
     }
 
+    public bool SKUIsExist(string sku, long productId)
+    {
+        throw new NotImplementedException();//TODO
+    }
+
     public bool SlugIsExist(string slug)
     {
         return _repository.Exists(s => s.Slug == slug);

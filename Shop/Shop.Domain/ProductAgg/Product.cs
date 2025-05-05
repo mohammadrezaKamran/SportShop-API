@@ -34,7 +34,7 @@ namespace Shop.Domain.ProductAgg
 
         public Product(string title, string imageName, string description, long categoryId,
            long subCategoryId, long? secondarySubCategoryId, IProductDomainService domainService,
-           string slug, SeoData seoData,string brandName,ProductStatus status)
+           string slug, SeoData seoData, string brandName, ProductStatus status)
         {
             NullOrEmptyDomainDataException.CheckString(imageName, nameof(imageName));
             Guard(title, slug, description, brandName, domainService);
@@ -48,7 +48,7 @@ namespace Shop.Domain.ProductAgg
             Slug = slug.ToSlug();
             SeoData = seoData;
             BrandName = brandName;
-            Status=status;
+            Status = status;
         }
 
         public void AddVariant(ProductVariant variant)
@@ -56,15 +56,15 @@ namespace Shop.Domain.ProductAgg
             ProductVariants.Add(variant);
         }
 
-        public void EditVariant(long variantId, string? color, string? size, int stock, decimal price, int? discount,string sku,IProductDomainService domainService)
+        public void EditVariant(long variantId, string? color, string? size, int? stock,
+              decimal? price, int? discount, string? sku, IProductDomainService domainService)
         {
             var variant = ProductVariants.FirstOrDefault(v => v.Id == variantId);
             if (variant == null)
                 throw new NullOrEmptyDomainDataException("تنوع محصول یافت نشد");
 
-            variant.Edit(color, size, stock, price, discount,sku, domainService);
+            variant.Edit(color, size, stock, price, discount, sku, domainService);
         }
-
         public void RemoveVariant(long variantId)
         {
             var variant = ProductVariants.FirstOrDefault(v => v.Id == variantId);
@@ -77,7 +77,7 @@ namespace Shop.Domain.ProductAgg
 
         public void Edit(string title, string description, long categoryId, string brandName,
             long subCategoryId, long secondarySubCategoryId, string slug, IProductDomainService domainService
-            , SeoData seoData,ProductStatus status)
+            , SeoData seoData, ProductStatus status)
         {
             Guard(title, slug, description, brandName, domainService);
             Title = title;
@@ -87,7 +87,7 @@ namespace Shop.Domain.ProductAgg
             SecondarySubCategoryId = secondarySubCategoryId;
             Slug = slug.ToSlug();
             SeoData = seoData;
-            BrandName= brandName;
+            BrandName = brandName;
             Status = status;
         }
 
@@ -119,7 +119,7 @@ namespace Shop.Domain.ProductAgg
             Specifications = specifications;
         }
 
-        private void Guard(string title, string slug, string description,string brandName,
+        private void Guard(string title, string slug, string description, string brandName,
             IProductDomainService domainService)
         {
             NullOrEmptyDomainDataException.CheckString(title, nameof(title));

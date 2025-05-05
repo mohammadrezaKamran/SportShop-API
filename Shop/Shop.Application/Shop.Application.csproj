@@ -11,9 +11,4 @@
     <ProjectReference Include="..\Shop.Domain\Shop.Domain.csproj" />
   </ItemGroup>
 
-  <ItemGroup>
-    <Folder Include="Products\ProductVariant\EditProductVariant\" />
-    <Folder Include="Products\ProductVariant\RemoveProductVariant\" />
-  </ItemGroup>
-
 </Project>
