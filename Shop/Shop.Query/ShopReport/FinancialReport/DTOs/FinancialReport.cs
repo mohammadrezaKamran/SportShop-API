@@ -11,6 +11,7 @@ namespace Shop.Query.ShopReport.FinancialReport.DTOs
 {
     internal class FinancialReport
     {
+        
     }
 }
 

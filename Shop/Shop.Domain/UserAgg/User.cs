@@ -121,17 +121,6 @@ namespace Shop.Domain.UserAgg
             Roles.AddRange(roles);
         }
 
-        ////public void AddToken(string hashJwtToken, string hashRefreshToken, DateTime tokenExpireDate, DateTime refreshTokenExpireDate, string device,string ipAddress)
-        ////{
-        ////    var activeTokenCount = Tokens.Count(c => c.RefreshTokenExpireDate > DateTime.Now);
-        ////    if (activeTokenCount == 3)
-        ////        throw new InvalidDomainDataException("امکان استفاده از 4 دستگاه همزمان وجود ندارد");
-
-        ////    var token = new UserToken(hashJwtToken, hashRefreshToken, tokenExpireDate, refreshTokenExpireDate, device,ipAddress);
-        ////    token.UserId = Id;
-        ////    Tokens.Add(token);
-        ////}
-        ////code jaygozin baraye shomaresh token
         public void AddToken(string hashJwtToken, string hashRefreshToken, DateTime tokenExpireDate, DateTime refreshTokenExpireDate, string device , string ipAddress)
         {
             // حذف توکن‌های منقضی‌شده

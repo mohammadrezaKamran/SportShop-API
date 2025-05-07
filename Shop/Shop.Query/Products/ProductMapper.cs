@@ -35,7 +35,8 @@ public static class ProductMapper
                 Size = variant.Size,
                 StockQuantity = variant.StockQuantity,
                 Price = variant.Price,
-                DiscountPercentage = variant.DiscountPercentage
+                DiscountPercentage = variant.DiscountPercentage,
+                VariantStatus=variant.Status,
             }).ToList() ?? new List<ProductVariantDto>(),
 
      

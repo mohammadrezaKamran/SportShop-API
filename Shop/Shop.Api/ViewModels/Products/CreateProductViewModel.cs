@@ -14,9 +14,9 @@ public class CreateProductViewModel
     public long SecondarySubCategoryId { get; set; }
     public string Slug { get; set; }
     public string BrandName {  get; set; }
-    public string ColorHex { get; set; }
     public SeoDataViewModel SeoData { get; set; }
     public string Specifications { get; set; }
+    public ProductStatus Status { get; set; }
 
     public Dictionary<string, string> GetSpecification()
     {
@@ -33,7 +33,6 @@ public class EditProductViewModel
     public long SubCategoryId { get; set; }
     public long SecondarySubCategoryId { get; set; }
     public string Slug { get; set; }
-    public string ColorHex {  get; set; }
     public string BrandName {  get; set; }
     public ProductStatus Status { get; set; }
     public SeoDataViewModel SeoData { get; set; }
@@ -60,23 +59,32 @@ public class SeoDataViewModel
 }
 public class ProductInventoryViewModel
 {
+    public string SKU { get; set; }
+    public string? Color { get; set; }
+    public string? Size { get; set; }
     public int StockQuantity { get; set; }
     public decimal Price { get; set; }
     public int? DiscountPercentage { get; set; }
 
 }
-public class AddInventoryViewModel
+public class AddProductVariantViewModel
 {
     public long ProductId { get; set; }
+    public string SKU { get; set; }
+    public string? Color { get; set; }
+    public string? Size { get; set; }
     public int StockQuantity { get; set; }
     public decimal Price { get; set; }
-    public int? PercentageDiscount { get; set; }
+    public int? DiscountPercentage { get; set; }
 }
-public class EditInventoryViewModel
+public class EditProductVariantViewModel
 {
-    public long InventoryId { get; set; }
     public long ProductId { get; set; }
+    public long ProductVariantId { get; set; }
+    public string SKU { get; set; }
+    public string? Color { get; set; }
+    public string? Size { get; set; }
     public int StockQuantity { get; set; }
     public decimal Price { get; set; }
-    public int? PercentageDiscount { get; private set; }
+    public int? DiscountPercentage { get; set; }
 }

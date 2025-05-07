@@ -31,12 +31,6 @@ namespace Shop.Infrastructure.Persistent.Ef.CommentAgg
             builder.Property(c => c.Status)
                    .IsRequired()
                    .HasConversion<int>();
-
-            builder.Property(c => c.UpdateDate)
-                   .IsRequired(false); 
-
-            builder.Property(c => c.CreationDate)
-                   .IsRequired();
         }
     }
 }

@@ -4,8 +4,10 @@ using Microsoft.Extensions.Caching.Distributed;
 using Shop.Application.Products.AddImage;
 using Shop.Application.Products.Create;
 using Shop.Application.Products.Edit;
-using Shop.Application.Products.Inventory.AddInventory;
-using Shop.Application.Products.Inventory.EditInventory;
+using Shop.Application.Products.ProductVariant.AddProductVariant;
+using Shop.Application.Products.ProductVariant.EditProductVariant;
+using Shop.Application.Products.ProductVariant.RemoveProductVariant;
+using Shop.Application.Products.ProductVariantStatusCommand;
 using Shop.Application.Products.RemoveImage;
 using Shop.Query.Products.DTOs;
 using Shop.Query.Products.GetByFilter;
@@ -77,12 +79,22 @@ internal class ProductFacade : IProductFacade
         return await _mediator.Send(new GetProductForShopQuery(filterParams));
     }
 
-    public async Task<OperationResult> AddInventory(AddInventoryCommand command)
+    public async Task<OperationResult> AddProductVariant(AddProductVariantCommand command)
     {
         return await _mediator.Send(command);
     }
 
-    public async Task<OperationResult> EditInventory(EditInventoryCommand command)
+    public async Task<OperationResult> EditProductVariant(EditProductVariantCommand command)
+    {
+        return await _mediator.Send(command);
+    }
+
+    public async Task<OperationResult> RemoveProductVariant(RemoveProductVariantCommand command)
+    {
+        return await _mediator.Send(command);
+    }
+
+    public async Task<OperationResult> ChangeProductVariantStatus(ChangeProductVariantStatusCommand command)
     {
         return await _mediator.Send(command);
     }

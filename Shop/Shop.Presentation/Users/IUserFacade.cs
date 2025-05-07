@@ -1,4 +1,5 @@
 ﻿using Common.Application;
+using Shop.Application.OTP;
 using Shop.Application.Users.AddToken;
 using Shop.Application.Users.ChangePassword;
 using Shop.Application.Users.Create;
@@ -23,6 +24,7 @@ namespace Shop.Presentation.Facade.Users
         Task<OperationResult> ChangePassword(ChangeUserPasswordCommand command);
         Task<OperationResult> AddToWishList(AddToWishListCommand command);
         Task<OperationResult> RemoveWishList(RemoveWishListCommand command);
+        Task<OperationResult> SendOTP(SendOtpCommand command);
 
         Task<UserDto?> GetUserByPhoneNumber(string phoneNumber);
         Task<UserDto?> GetUserById(long userId);

@@ -42,5 +42,6 @@ public class ProductVariantDto
     public int StockQuantity { get; set; }
     public decimal Price { get; set; }
     public int? DiscountPercentage { get; set; }
+    public ProductVariantStatus VariantStatus { get; set; }
 }
 

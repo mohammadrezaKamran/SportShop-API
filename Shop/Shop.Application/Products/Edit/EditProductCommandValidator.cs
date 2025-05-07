@@ -15,9 +15,6 @@ namespace Shop.Application.Products.Edit
             RuleFor(r => r.BrandName)
         .NotEmpty().WithMessage(ValidationMessages.required("نام برند"));
 
-            RuleFor(r => r.ColorHex)
-          .NotEmpty().WithMessage(ValidationMessages.required("ColorHex"));
-
             RuleFor(r => r.Slug)
                .NotEmpty().WithMessage(ValidationMessages.required("Slug"));
 

@@ -2,7 +2,7 @@
 using FluentValidation;
 using Shop.Application.Products.ProductVariant.AddProductVariant;
 
-public class AddProductVariantCommandValidator : AbstractValidator<AddProductVariant>
+public class AddProductVariantCommandValidator : AbstractValidator<AddProductVariantCommand>
 {
     public AddProductVariantCommandValidator()
     {

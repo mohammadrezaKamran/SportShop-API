@@ -19,4 +19,8 @@ public class RegisterViewModel
     [MinLength(6, ErrorMessage = "تکرار کلمه عبور باید بیشتر از 5 کاراکتر باشد")]
     [Compare(nameof(Password),ErrorMessage = "کلمه های عبور یکسان نیستند")]
     public string ConfirmPassword { get; set; }
+
+    [Required(ErrorMessage = "کارسال شده را وارد کنید")]
+
+    public string Code { get; set; }
 }

@@ -1,4 +1,5 @@
 ﻿using Common.Application.Validation;
+using Microsoft.Extensions.Configuration;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -9,11 +10,12 @@ namespace Shop.Infrastructure.Services.Sms
 {
     internal class KaveNegarSmsSender:ISmsSender
     {
+      
         private readonly string _apiKey;
 
-        public KaveNegarSmsSender(string apiKey)
+        public KaveNegarSmsSender(IConfiguration configuration)
         {
-            _apiKey = apiKey;
+            _apiKey = configuration["SmsSettings:ApiKey"];
         }
 
         public async Task SendSmsAsync(string phoneNumber, string message)

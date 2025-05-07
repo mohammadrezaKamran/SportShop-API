@@ -2,8 +2,10 @@
 using Shop.Application.Products.AddImage;
 using Shop.Application.Products.Create;
 using Shop.Application.Products.Edit;
-using Shop.Application.Products.Inventory.AddInventory;
-using Shop.Application.Products.Inventory.EditInventory;
+using Shop.Application.Products.ProductVariant.AddProductVariant;
+using Shop.Application.Products.ProductVariant.EditProductVariant;
+using Shop.Application.Products.ProductVariant.RemoveProductVariant;
+using Shop.Application.Products.ProductVariantStatusCommand;
 using Shop.Application.Products.RemoveImage;
 using Shop.Query.Products.DTOs;
 
@@ -15,8 +17,10 @@ public interface IProductFacade
     Task<OperationResult> EditProduct(EditProductCommand command);
     Task<OperationResult> AddImage(AddProductImageCommand command);
     Task<OperationResult> RemoveImage(RemoveProductImageCommand command);
-    Task<OperationResult> AddInventory(AddInventoryCommand command);
-    Task<OperationResult> EditInventory(EditInventoryCommand command);
+    Task<OperationResult> AddProductVariant(AddProductVariantCommand command);
+    Task<OperationResult> EditProductVariant(EditProductVariantCommand command);
+    Task<OperationResult> RemoveProductVariant(RemoveProductVariantCommand command);
+    Task<OperationResult> ChangeProductVariantStatus(ChangeProductVariantStatusCommand command);
 
     Task<ProductDto?> GetProductById(long productId);
     Task<ProductDto?> GetProductBySlug(string slug);

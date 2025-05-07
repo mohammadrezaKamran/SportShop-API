@@ -7,6 +7,7 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Shop.Api.Infrastructure.JwtUtil;
 using Shop.Api.ViewModels.Auth;
+using Shop.Application.OTP;
 using Shop.Application.Users.AddToken;
 using Shop.Application.Users.Register;
 using Shop.Application.Users.RemoveToken;
@@ -42,11 +43,11 @@ public class AuthController : ApiController
             return CommandResult(result);
         }
 
-        //if (user.IsActive == false)
-        //{
-        //    var result = OperationResult<LoginResultDto>.Error("حساب کاربری شما غیرفعال است");
-        //    return CommandResult(result);
-        //}
+        if (user.IsPhoneNumberVerified == false)
+        {
+            var result = OperationResult<LoginResultDto>.Error("حساب کاربری شما غیرفعال است");
+            return CommandResult(result);
+        }
 
         var loginResult = await AddTokenAndGenerateJwt(user);
         return CommandResult(loginResult);
@@ -55,10 +56,19 @@ public class AuthController : ApiController
     [HttpPost("register")]
     public async Task<ApiResult> Register(RegisterViewModel register)
     {
-        var command = new RegisterUserCommand(new PhoneNumber(register.PhoneNumber), register.Password);
+        var command = new RegisterUserCommand(new PhoneNumber(register.PhoneNumber), register.Password,register.Code);
         var result = await _userFacade.RegisterUser(command);
         return CommandResult(result);
     }
+
+    [HttpPost("SendOTPCode")]
+    public async Task<ApiResult> SendOTPCode(string PhoneNumber)
+    {
+        var command = new SendOtpCommand(PhoneNumber);
+        var result = await _userFacade.SendOTP(command);
+        return CommandResult(result);
+    }
+
     [HttpPost("RefreshToken")]
     public async Task<ApiResult<LoginResultDto?>> RefreshToken(string refreshToken)
     {

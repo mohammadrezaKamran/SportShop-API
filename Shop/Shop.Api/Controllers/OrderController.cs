@@ -8,6 +8,7 @@ using Shop.Application.Orders.Checkout;
 using Shop.Application.Orders.DecreaseItemCount;
 using Shop.Application.Orders.IncreaseItemCount;
 using Shop.Application.Orders.RemoveItem;
+using Shop.Application.Orders.Status;
 using Shop.Domain.OrderAgg;
 using Shop.Domain.RoleAgg.Enums;
 using Shop.Presentation.Facade.Orders;
@@ -73,6 +74,13 @@ public class OrderController : ApiController
     public async Task<ApiResult> CheckoutOrder(CheckoutOrderCommand command)
     {
         var result = await _orderFacade.OrderCheckOut(command);
+        return CommandResult(result);
+    }
+
+    [HttpPost("ChangeStatus")]
+    public async Task<ApiResult> ChangeOrderStatus(ChangeOrderStatusCommand command)
+    {
+        var result = await _orderFacade.ChangeOrderStatus(command);
         return CommandResult(result);
     }
 

@@ -5,6 +5,7 @@ using Shop.Application.Orders.DecreaseItemCount;
 using Shop.Application.Orders.Finally;
 using Shop.Application.Orders.IncreaseItemCount;
 using Shop.Application.Orders.RemoveItem;
+using Shop.Application.Orders.Status;
 using Shop.Query.Orders.DTOs;
 
 namespace Shop.Presentation.Facade.Orders;
@@ -17,8 +18,9 @@ public interface IOrderFacade
     Task<OperationResult> IncreaseItemCount(IncreaseOrderItemCountCommand command);
     Task<OperationResult> DecreaseItemCount(DecreaseOrderItemCountCommand command);
     Task<OperationResult> FinallyOrder(OrderFinallyCommand command);
+    Task<OperationResult> ChangeOrderStatus(ChangeOrderStatusCommand command);
     Task<OperationResult> SendOrder(long orderId);
-
+ 
 
 
     Task<OrderDto?> GetOrderById(long orderId);

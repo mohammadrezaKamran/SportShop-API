@@ -12,7 +12,7 @@ namespace Shop.Application.Products.Edit
     public class EditProductCommand : IBaseCommand
     {
         public EditProductCommand(long productId, string title, IFormFile? imageFile, string description, long categoryId,
-            long subCategoryId,ProductStatus status,long secondarySubCategoryId, string slug, SeoData seoData, string brandName, List<string> colorHex, Dictionary<string, string> specifications)
+            long subCategoryId,ProductStatus status,long secondarySubCategoryId, string slug, SeoData seoData, string brandName, Dictionary<string, string> specifications)
         {
             ProductId = productId;
             Title = title;
@@ -24,7 +24,6 @@ namespace Shop.Application.Products.Edit
             Slug = slug;
             SeoData = seoData;
             BrandName = brandName;
-            ColorHex = colorHex;
             Specifications = specifications;
             Status=status;
         }
@@ -39,7 +38,6 @@ namespace Shop.Application.Products.Edit
         public string Slug { get; private set; }
         public SeoData SeoData { get; private set; }
         public string BrandName {  get; private set; }
-        public List<string> ColorHex { get; set; }
         public Dictionary<string, string> Specifications { get; private set; }
         public ProductStatus Status { get; private set; }
     }

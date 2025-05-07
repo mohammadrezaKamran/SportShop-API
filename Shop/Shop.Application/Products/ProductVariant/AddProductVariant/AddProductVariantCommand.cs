@@ -8,7 +8,7 @@ using System.Threading.Tasks;
 
 namespace Shop.Application.Products.ProductVariant.AddProductVariant
 {
-    public class AddProductVariant : IBaseCommand
+    public class AddProductVariantCommand : IBaseCommand
     {
         public long ProductId { get;  set; }
         public string SKU { get;  set; }

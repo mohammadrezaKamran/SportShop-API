@@ -18,7 +18,7 @@ namespace Shop.Infrastructure.Persistent.Ef.OTP
 
         public async Task<Otp?> GetValidOtpAsync(string phoneNumber, string code)
         {
-            return await Context.OTP
+            return await Context.OTPs
         .Where(o => o.PhoneNumber == phoneNumber && o.Code == code && !o.IsUsed && o.ExpireAt >= DateTime.UtcNow)
         .OrderByDescending(o => o.ExpireAt)
         .FirstOrDefaultAsync();

@@ -8,18 +8,18 @@ using System.Threading.Tasks;
 
 namespace Shop.Application.Products.ProductVariant.AddProductVariant
 {
-    public class AddProductVariantHandler : IBaseCommandHandler<AddProductVariant>
+    public class AddProductVariantCommandHandler : IBaseCommandHandler<AddProductVariantCommand>
     {
         private readonly IProductRepository _repository;
         private readonly IProductDomainService _domainService;
 
-        public AddProductVariantHandler(IProductRepository repository, IProductDomainService domainService)
+        public AddProductVariantCommandHandler(IProductRepository repository, IProductDomainService domainService)
         {
             _repository = repository;
             _domainService = domainService;
         }
 
-        public async Task<OperationResult> Handle(AddProductVariant request, CancellationToken cancellationToken)
+        public async Task<OperationResult> Handle(AddProductVariantCommand request, CancellationToken cancellationToken)
         {
             var product = await _repository.GetAsync(request.ProductId);
             if (product == null)

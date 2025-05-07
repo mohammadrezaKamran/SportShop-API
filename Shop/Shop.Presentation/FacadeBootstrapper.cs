@@ -9,7 +9,9 @@ using Shop.Presentation.Facade.Siteentities.ShippingMethods;
 using Shop.Presentation.Facade.SiteEntities.Slider;
 using Shop.Presentation.Facade.Users;
 using Shop.Presentation.Facade.Users.Addresses;
-using Shop.Presentation.Facade.SupportTicket;
+using Shop.Domain.Auth.OTP;
+using Common.Application.Validation;
+using Shop.Presentation.Facade.Report;
 
 namespace Shop.Presentation.Facade;
 
@@ -27,6 +29,6 @@ public static class FacadeBootstrapper
         services.AddScoped<IShippingMethodFacade, ShippingMethodFacade>();
         services.AddScoped<IUserFacade, UserFacade>();
         services.AddScoped<IUserAddressFacade, UserAddressFacade>();
-        services.AddScoped<ISupportTicketFacade, SupportTicketFacade>();
+        services.AddScoped<IReportFacade, ReportFacade>();
     }
 }

@@ -2,6 +2,7 @@
 using Common.Application.SecurityUtil;
 using MediatR;
 using Microsoft.Extensions.Caching.Distributed;
+using Shop.Application.OTP;
 using Shop.Application.Users.AddToken;
 using Shop.Application.Users.ChangePassword;
 using Shop.Application.Users.Create;
@@ -111,5 +112,10 @@ internal class UserFacade : IUserFacade
     public async Task<List<ProductDto?>> GetWishList(long userId)
     {
         return await _mediator.Send(new GetWishListQuery(userId));
+    }
+
+    public async Task<OperationResult> SendOTP(SendOtpCommand command)
+    {
+        return await _mediator.Send(command);
     }
 }

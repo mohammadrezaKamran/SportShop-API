@@ -8,7 +8,6 @@ using Shop.Domain.OrderAgg;
 using Shop.Domain.ProductAgg;
 using Shop.Domain.RoleAgg;
 using Shop.Domain.SiteEntities;
-using Shop.Domain.SupportTicketAgg;
 using Shop.Domain.UserAgg;
 using Shop.Infrastructure._Utilities.MediatR;
 
@@ -30,9 +29,8 @@ public class ShopContext : DbContext
     public DbSet<Slider> Sliders { get; set; }
     public DbSet<Banner> Banners { get; set; }
     public DbSet<User> Users { get; set; }
-    public DbSet<SupportTicketAgg> SupportTickets { get; set; }
     public DbSet<ShippingMethod> ShippingMethods { get; set; }
-    public DbSet<Otp> OTP { get; set; }
+    public DbSet<Otp> OTPs { get; set; }
 
     public override async Task<int> SaveChangesAsync(CancellationToken cancellationToken = new CancellationToken())
     {

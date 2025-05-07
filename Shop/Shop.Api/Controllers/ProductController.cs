@@ -4,15 +4,20 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Shop.Api.Infrastructure.Security;
 using Shop.Api.ViewModels.Products;
+using Shop.Application.Orders.Status;
 using Shop.Application.Products.AddImage;
 using Shop.Application.Products.Create;
 using Shop.Application.Products.Edit;
-using Shop.Application.Products.Inventory.AddInventory;
-using Shop.Application.Products.Inventory.EditInventory;
+using Shop.Application.Products.ProductVariant.AddProductVariant;
+using Shop.Application.Products.ProductVariant.EditProductVariant;
+using Shop.Application.Products.ProductVariant.RemoveProductVariant;
+using Shop.Application.Products.ProductVariantStatusCommand;
 using Shop.Application.Products.RemoveImage;
 using Shop.Domain.RoleAgg.Enums;
+using Shop.Presentation.Facade.Orders;
 using Shop.Presentation.Facade.Products;
 using Shop.Query.Products.DTOs;
+using System.Drawing;
 
 namespace Shop.Api.Controllers;
 
@@ -28,7 +33,7 @@ public class ProductController : ApiController
 
     [AllowAnonymous]
     [HttpGet]
-    public async Task<ApiResult<ProductFilterResult>> GetProductByFilter([FromQuery]ProductFilterParams filterParams)
+    public async Task<ApiResult<ProductFilterResult>> GetProductByFilter([FromQuery] ProductFilterParams filterParams)
     {
         return QueryResult(await _productFacade.GetProductsByFilter(filterParams));
     }
@@ -67,28 +72,62 @@ public class ProductController : ApiController
             SecondarySubCategoryId = command.SecondarySubCategoryId,
             Slug = command.Slug,
             BrandName = command.BrandName,
-            ColorHex = command.ColorHex,
             Specifications = command.GetSpecification(),
             SubCategoryId = command.SubCategoryId,
-            Title = command.Title
+            Title = command.Title,
+            Status = command.Status,
         });
         return CommandResult(result);
     }
 
-    [HttpPost("Inventory")]
-    public async Task<ApiResult> AddInventory(AddInventoryViewModel command)
+    [HttpPost("ProductVariant")]
+    public async Task<ApiResult> AddProductVariant(AddProductVariantViewModel command)
     {
-        var result = await _productFacade.AddInventory(new AddInventoryCommand(command.ProductId,command.StockQuantity,command.Price,
-                                                                               command.PercentageDiscount));
+        var result = await _productFacade.AddProductVariant(new AddProductVariantCommand()
+        {
+            ProductId = command.ProductId,
+            StockQuantity = command.StockQuantity,
+            Price = command.Price,
+            DiscountPercentage = command.DiscountPercentage,
+            SKU = command.SKU,
+            Size = command.Size,
+            Color = command.Color
+        });
+
         return CommandResult(result);
     }
-    [HttpPut("Inventory")]
-    public async Task<ApiResult> EditInventory(EditInventoryViewModel command)
+    [HttpPut("ProductVariant")]
+    public async Task<ApiResult> EditProductVariant(EditProductVariantViewModel command)
     {
-        var result = await _productFacade.EditInventory(new EditInventoryCommand(command.InventoryId,command.ProductId, command.StockQuantity, command.Price,
-                                                                               command.PercentageDiscount));
+        var result = await _productFacade.EditProductVariant(new EditProductVariantCommand()
+        {
+            ProductId = command.ProductId,
+            ProductVariantId = command.ProductVariantId,
+            StockQuantity = command.StockQuantity,
+            Price = command.Price,
+            DiscountPercentage = command.DiscountPercentage,
+            SKU = command.SKU,
+            Size = command.Size,
+            Color = command.Color
+        });
+
         return CommandResult(result);
     }
+
+    [HttpDelete("ProductVariant")]
+    public async Task<ApiResult> RemoveProductVariant(RemoveProductVariantCommand command)
+    {
+        var result = await _productFacade.RemoveProductVariant(command);
+        return CommandResult(result);
+    }
+
+    [HttpPost("ChangeStatus")]
+    public async Task<ApiResult> ChangeProductVariantStatus(ChangeProductVariantStatusCommand command)
+    {
+        var result = await _productFacade.ChangeProductVariantStatus(command);
+        return CommandResult(result);
+    }
+
     [HttpPost("images")]
     public async Task<ApiResult> AddImage([FromForm] AddProductImageCommand command)
     {
@@ -105,9 +144,9 @@ public class ProductController : ApiController
     [HttpPut]
     public async Task<ApiResult> EditProduct([FromForm] EditProductViewModel command)
     {
-        var result = await _productFacade.EditProduct(new EditProductCommand(command.ProductId,command.Title,command.ImageFile,
-            command.Description,command.CategoryId,command.SubCategoryId,command.Status,command.SecondarySubCategoryId,command.Slug,command.SeoData.Map(),
-            command.BrandName,command.ColorHex,command.GetSpecification()));
+        var result = await _productFacade.EditProduct(new EditProductCommand(command.ProductId, command.Title, command.ImageFile,
+            command.Description, command.CategoryId, command.SubCategoryId, command.Status, command.SecondarySubCategoryId, command.Slug, command.SeoData.Map(),
+            command.BrandName, command.GetSpecification()));
 
         return CommandResult(result);
     }

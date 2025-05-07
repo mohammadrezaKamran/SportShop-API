@@ -101,7 +101,8 @@ namespace Shop.Query.Products.GetProductForShop
                         Size = variant.Size,
                         StockQuantity = variant.StockQuantity,
                         Price = variant.Price,
-                        DiscountPercentage = variant.DiscountPercentage
+                        DiscountPercentage = variant.DiscountPercentage,
+                        VariantStatus=variant.Status
                     }).ToList()
                 })
                 .ToListAsync(cancellationToken);
