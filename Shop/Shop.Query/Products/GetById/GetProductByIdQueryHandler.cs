@@ -18,7 +18,7 @@ public class GetProductByIdQueryHandler : IQueryHandler<GetProductByIdQuery, Pro
     {
         var product = await _context.Products
             .FirstOrDefaultAsync(f => f.Id == request.ProductId, cancellationToken);
-
+        
         var model = product.Map();
         if (model == null)
             return null;

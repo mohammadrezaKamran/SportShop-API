@@ -16,7 +16,7 @@ public class ProductShopDto : BaseDto
     public string BrandName { get; set; }
     public ProductStatus Status { get; set; }
     public string ImageName { get; set; }
-    public List<ProductInventoryDto> Inventories { get; set; }
+    public List<ProductVariantDto> ProductVariants { get; set; }
 }
 public class ProductShopFilterParam : BaseFilterParam
 {

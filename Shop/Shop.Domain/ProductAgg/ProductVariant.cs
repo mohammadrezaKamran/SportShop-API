@@ -20,7 +20,7 @@ namespace Shop.Domain.ProductAgg
         public decimal Price { get; private set; }
         public int? DiscountPercentage { get; private set; }
 
-        public Product Product { get; private set; } //ForeignKey
+        public ProductVariantStatus Status { get; private set; }
         private ProductVariant() { } //EF Core
 
         private const decimal MinPrice = 5000;           // 5 هزار تومان
@@ -29,6 +29,7 @@ namespace Shop.Domain.ProductAgg
         public ProductVariant(long productId, string? color, string? size, int stockQuantity, decimal price, int? discountPercentage,string sku,IProductDomainService domainService)
         {
             SetFields(productId, color, size, stockQuantity, price, discountPercentage, sku,  domainService);
+            UpdateStatus();
         }
 
         public void Edit(string? color, string? size, int? stockQuantity, decimal? price, int? discountPercentage, string? sku, IProductDomainService domainService)
@@ -39,8 +40,11 @@ namespace Shop.Domain.ProductAgg
                 if (!string.IsNullOrWhiteSpace(size))
                     Size = size;
 
-                if (stockQuantity.HasValue)
+            if (stockQuantity.HasValue)
+            {
                 StockQuantity = stockQuantity.Value;
+                UpdateStatus();
+            }
 
                 if (price.HasValue)
                     Price = price.Value;
@@ -89,6 +93,7 @@ namespace Shop.Domain.ProductAgg
                 throw new InvalidDomainDataException("تعداد باید بیشتر از صفر باشد");
 
             StockQuantity += quantity;
+            UpdateStatus();
         }
 
         public void DecreaseStock(int quantity)
@@ -101,6 +106,8 @@ namespace Shop.Domain.ProductAgg
 
 
             StockQuantity -= quantity;
+
+            UpdateStatus();
         }
 
         public decimal FinalPrice()
@@ -110,6 +117,20 @@ namespace Shop.Domain.ProductAgg
 
             var discount = (Price * DiscountPercentage.Value) / 100;
             return Price - discount;
+        }
+
+        public void ChangeVariantStatus(ProductVariantStatus status)
+        {
+            Status = status;
+        }
+        private void UpdateStatus()
+        {
+            if (StockQuantity <= 0)
+                Status = ProductVariantStatus.OutOfStock;
+            else if (StockQuantity<5)
+                Status = ProductVariantStatus.LowStock;
+            else
+                Status = ProductVariantStatus.Active;
         }
     }
 }

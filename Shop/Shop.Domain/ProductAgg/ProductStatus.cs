@@ -3,13 +3,20 @@
 public enum ProductStatus
 {
 
-    Available,
+     Published,
+
+     Disabled
+}
+public enum ProductVariantStatus
+{
+
+    Active,
+
+    InActive,
 
     OutOfStock,
 
-    ComingSoon,
+    LowStock,
 
-    New,
-
-    InActive
+    Deleted,
 }

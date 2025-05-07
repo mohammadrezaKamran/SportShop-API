@@ -110,8 +110,5 @@ public class ProductVariantConfiguration : IEntityTypeConfiguration<ProductVaria
         builder.Property(v => v.DiscountPercentage)
                .IsRequired(false);
 
-        builder.HasOne(v => v.Product)
-               .WithMany(p => p.ProductVariants)
-               .HasForeignKey(v => v.ProductId);
     }
 }

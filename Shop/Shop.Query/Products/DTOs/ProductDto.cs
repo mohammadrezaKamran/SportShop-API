@@ -14,7 +14,7 @@ public class ProductDto : BaseDto
     public ProductCategoryDto Category { get; set; }
     public ProductCategoryDto SubCategory { get; set; }
     public ProductCategoryDto? SecondarySubCategory { get; set; }
-   public List<ProductInventoryDto> Inventories { get; set; }
+    public List<ProductVariantDto> ProductVariants { get; set; }
     public ProductStatus Status { get; set; }
     public string Slug { get; set; }
     public SeoData SeoData { get; set; }
@@ -32,20 +32,15 @@ public class ProductCategoryDto
 }
 
 
-public class ProductInventoryDto
+public class ProductVariantDto
 {
     public long Id { get; set; }
     public long ProductId { get; set; }
-    public bool IsAvailable { get; set; } 
-    public List<ProductInventoryItemDto> InventoryItems { get; set; } 
-}
-public class ProductInventoryItemDto
-{
-    public long Id { get; set; }
-    public long InventoryId { get; set; }
-    public string? Color { get; set; } 
-    public int? Weight { get; set; } 
-    public int StockQuantity { get; set; } 
-    public decimal Price { get; set; } 
+    public string SKU { get; set; }
+    public string? Color { get; set; }
+    public string? Size { get; set; }
+    public int StockQuantity { get; set; }
+    public decimal Price { get; set; }
     public int? DiscountPercentage { get; set; }
 }
+

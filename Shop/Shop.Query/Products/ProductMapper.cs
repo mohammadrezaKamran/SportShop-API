@@ -24,21 +24,21 @@ public static class ProductMapper
             BrandName = product.BrandName,
             SeoData = product.SeoData,
             Status=product.Status,
-            // ✅ بررسی وجود `Inventory` (در صورتی که مقدار `null` نباشد)
-            Inventories = product.Inventories.Select(inventory => new ProductInventoryDto()
+
+            ProductVariants = product.ProductVariants?
+            .Select(variant => new ProductVariantDto
             {
-                Id = inventory.Id,
-                ProductId = inventory.ProductId,
-                IsAvailable = inventory.IsAvailable,
-                InventoryItems = inventory.InventoryItems.Select(item => new ProductInventoryItemDto()
-                {
-                    Color = item.Color,
-                    Weight = item.Weight,
-                    StockQuantity = item.StockQuantity,
-                    Price = item.Price,
-                    DiscountPercentage = item.DiscountPercentage
-                }).ToList()
-            }).ToList(),
+                Id = variant.Id,
+                ProductId = variant.ProductId,
+                SKU = variant.SKU,
+                Color = variant.Color,
+                Size = variant.Size,
+                StockQuantity = variant.StockQuantity,
+                Price = variant.Price,
+                DiscountPercentage = variant.DiscountPercentage
+            }).ToList() ?? new List<ProductVariantDto>(),
+
+     
             Specifications = product.Specifications.Select(s => new ProductSpecificationDto()
             {
                 Value = s.Value,
