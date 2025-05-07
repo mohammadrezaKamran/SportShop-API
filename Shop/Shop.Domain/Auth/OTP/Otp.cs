@@ -21,6 +21,7 @@ namespace Shop.Domain.Auth.OTP
             ExpireAt = DateTime.UtcNow.Add(validFor);
             IsUsed = false;
         }
+        private Otp() { }
 
         public bool IsValid(string inputCode)
         {
