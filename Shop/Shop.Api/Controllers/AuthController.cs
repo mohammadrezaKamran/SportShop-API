@@ -56,7 +56,7 @@ public class AuthController : ApiController
     [HttpPost("register")]
     public async Task<ApiResult> Register(RegisterViewModel register)
     {
-        var command = new RegisterUserCommand(new PhoneNumber(register.PhoneNumber), register.Password,register.Code);
+        var command = new RegisterUserCommand(new PhoneNumber(register.PhoneNumber), register.Password/*,register.Code*/);
         var result = await _userFacade.RegisterUser(command);
         return CommandResult(result);
     }

@@ -20,7 +20,7 @@ public class RegisterViewModel
     [Compare(nameof(Password),ErrorMessage = "کلمه های عبور یکسان نیستند")]
     public string ConfirmPassword { get; set; }
 
-    [Required(ErrorMessage = "کارسال شده را وارد کنید")]
+    //[Required(ErrorMessage = "کارسال شده را وارد کنید")]
 
-    public string Code { get; set; }
+    //public string Code { get; set; }
 }
