@@ -27,7 +27,7 @@ namespace Shop.Domain.ProductAgg
         public string Slug { get; private set; }
         public SeoData SeoData { get; private set; }
         public string BrandName { get; private set; }
-        public List<ProductVariant> ProductVariants { get; private set; }
+        public List<ProductVariant> ProductVariants { get; private set; } = new List<ProductVariant>();
         public ProductStatus Status { get; private set; }
         public List<ProductImage> Images { get; private set; }
         public List<ProductSpecification> Specifications { get; private set; }

@@ -8,6 +8,8 @@ internal class SliderConfiguration : IEntityTypeConfiguration<Slider>
 {
     public void Configure(EntityTypeBuilder<Slider> builder)
     {
+        builder.ToTable("Sliders", "slider");
+
         builder.Property(b => b.ImageName)
             .HasMaxLength(120).IsRequired();
 

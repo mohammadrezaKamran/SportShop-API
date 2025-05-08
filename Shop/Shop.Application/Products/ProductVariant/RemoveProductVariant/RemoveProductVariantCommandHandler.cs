@@ -13,7 +13,7 @@ public class RemoveProductVariantCommandHandler : IBaseCommandHandler<RemoveProd
 
     public async Task<OperationResult> Handle(RemoveProductVariantCommand request, CancellationToken cancellationToken)
     {
-        var product = await _repository.GetAsync(request.ProductId);
+        var product = await _repository.GetTracking(request.ProductId);
         if (product == null)
             return OperationResult.NotFound();
 

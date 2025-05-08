@@ -75,40 +75,22 @@ public class ProductConfiguration:IEntityTypeConfiguration<Product>
                 .HasMaxLength(100);
         });
 
-        builder.HasMany(p => p.ProductVariants)
-                 .WithOne()
-                 .HasForeignKey("ProductId");
+        builder.OwnsMany(b => b.ProductVariants, option =>
+        {
+            option.ToTable("ProductVariants", "product");        
 
-    }
-}
-public class ProductVariantConfiguration : IEntityTypeConfiguration<ProductVariant>
-{
-    public void Configure(EntityTypeBuilder<ProductVariant> builder)
-    {
-        builder.ToTable("ProductVariants");
+            option.Property(v => v.SKU)
+                  .IsRequired()
+                  .HasMaxLength(100);
 
-        builder.HasKey(v => v.Id);
+            option.HasIndex(v => v.SKU).IsUnique();
 
-        builder.Property(v => v.SKU)
-               .IsRequired()
-               .HasMaxLength(100);
-
-        builder.HasIndex(v => v.SKU).IsUnique();
-
-        builder.Property(v => v.Color)
-               .HasMaxLength(50);
-
-        builder.Property(v => v.Size)
-               .HasMaxLength(50);
-
-        builder.Property(v => v.StockQuantity)
-               .IsRequired();
-
-        builder.Property(v => v.Price)
-               .IsRequired();
-
-        builder.Property(v => v.DiscountPercentage)
-               .IsRequired(false);
+            option.Property(v => v.Color).HasMaxLength(50);
+            option.Property(v => v.Size).HasMaxLength(50);
+            option.Property(v => v.StockQuantity).IsRequired();
+            option.Property(v => v.Price).IsRequired();
+            option.Property(v => v.DiscountPercentage).IsRequired(false);
+        });
 
     }
 }

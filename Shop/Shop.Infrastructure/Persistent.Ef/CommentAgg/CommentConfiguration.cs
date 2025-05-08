@@ -14,7 +14,7 @@ namespace Shop.Infrastructure.Persistent.Ef.CommentAgg
     {
         public void Configure(EntityTypeBuilder<Comment> builder)
         {
-            builder.ToTable("Comments");
+            builder.ToTable("Comments", "comment");
 
             builder.HasKey(c => c.Id);
 

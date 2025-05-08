@@ -14,7 +14,7 @@ public class ProductDomainService:IProductDomainService
 
     public bool SKUIsExist(string sku, long productId)
     {
-        throw new NotImplementedException();//TODO
+        return false;
     }
 
     public bool SlugIsExist(string slug)

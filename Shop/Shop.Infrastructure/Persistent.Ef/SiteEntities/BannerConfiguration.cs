@@ -7,6 +7,8 @@ internal class BannerConfiguration : IEntityTypeConfiguration<Banner>
 {
     public void Configure(EntityTypeBuilder<Banner> builder)
     {
+        builder.ToTable("Banners", "banner");
+
         builder.Property(b => b.ImageName)
             .HasMaxLength(120).IsRequired();
 

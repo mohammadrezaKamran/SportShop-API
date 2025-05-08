@@ -21,7 +21,7 @@ namespace Shop.Application.Products.ProductVariant.AddProductVariant
 
         public async Task<OperationResult> Handle(AddProductVariantCommand request, CancellationToken cancellationToken)
         {
-            var product = await _repository.GetAsync(request.ProductId);
+            var product = await _repository.GetTracking(request.ProductId);
             if (product == null)
                 return OperationResult.NotFound();
 

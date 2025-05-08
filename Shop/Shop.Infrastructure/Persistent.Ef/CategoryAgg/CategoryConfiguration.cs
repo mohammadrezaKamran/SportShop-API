@@ -8,7 +8,7 @@ namespace Shop.Infrastructure.Persistent.Ef.CategoryAgg
     {
         public void Configure(EntityTypeBuilder<Category> builder)
         {
-            builder.ToTable("Categories", "dbo");
+            builder.ToTable("Categories", "category");
 
             builder.HasKey(x => x.Id);
             builder.HasIndex(b => b.Slug).IsUnique();
