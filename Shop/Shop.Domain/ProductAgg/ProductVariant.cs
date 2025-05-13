@@ -46,10 +46,13 @@ namespace Shop.Domain.ProductAgg
                 UpdateStatus();
             }
 
-                if (price.HasValue)
-                    Price = price.Value;
+            if (price.HasValue)
+            {
+                ValidatePrice(price.Value);
+                Price = price.Value;
+            }
 
-                DiscountPercentage = discountPercentage;
+            DiscountPercentage = discountPercentage;
 
             if (!string.IsNullOrWhiteSpace(sku) && sku != SKU)
             {
@@ -78,6 +81,7 @@ namespace Shop.Domain.ProductAgg
             Color = string.IsNullOrWhiteSpace(color) ? null : color.Trim();
             Size = size;
             StockQuantity = stockQuantity;
+            ValidatePrice(price);
             Price = price;
             DiscountPercentage = discountPercentage;
 
@@ -122,6 +126,11 @@ namespace Shop.Domain.ProductAgg
         public void ChangeVariantStatus(ProductVariantStatus status)
         {
             Status = status;
+        }
+        private void ValidatePrice(decimal price)
+        {
+            if (price < MinPrice || price > MaxPrice)
+                throw new InvalidDomainDataException($"قیمت باید بین {MinPrice} تا {MaxPrice} تومان باشد.");
         }
         private void UpdateStatus()
         {

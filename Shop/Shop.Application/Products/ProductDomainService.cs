@@ -14,7 +14,9 @@ public class ProductDomainService:IProductDomainService
 
     public bool SKUIsExist(string sku, long productId)
     {
-        return false;
+        return _repository.Exists(product =>
+             product.ProductVariants.Any(v => v.SKU == sku) &&
+             product.Id != productId);
     }
 
     public bool SlugIsExist(string slug)

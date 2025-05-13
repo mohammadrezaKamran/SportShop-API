@@ -14,8 +14,10 @@ public class ProductConfiguration:IEntityTypeConfiguration<Product>
         builder.Property(b => b.Title)
             .IsRequired()
             .HasMaxLength(200);
+
         builder.Property(b => b.Description)
-            .IsRequired();
+            .IsRequired()
+             .HasMaxLength(5000);
 
         builder.Property(b => b.ImageName)
             .IsRequired()
@@ -25,6 +27,13 @@ public class ProductConfiguration:IEntityTypeConfiguration<Product>
             .IsRequired()
             .IsUnicode(false)
             .HasMaxLength(500);
+
+        builder.Property(p => p.BrandName)
+               .IsRequired()
+               .HasMaxLength(100);
+
+        builder.Property(p => p.Status)
+              .IsRequired();
 
         builder.OwnsOne(b => b.SeoData, config =>
         {
@@ -90,6 +99,7 @@ public class ProductConfiguration:IEntityTypeConfiguration<Product>
             option.Property(v => v.StockQuantity).IsRequired();
             option.Property(v => v.Price).IsRequired();
             option.Property(v => v.DiscountPercentage).IsRequired(false);
+            option.Property(p => p.Status).IsRequired();
         });
 
     }

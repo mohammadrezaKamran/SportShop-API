@@ -7,9 +7,10 @@ namespace Shop.Application.Comments.Create
     {
         public CreateCommentCommandValidator()
         {
-            RuleFor(r => r.Text)
-                .NotNull()
-                .MinimumLength(5).WithMessage(ValidationMessages.minLength("متن نظر", 5));
+            RuleFor(x => x.Text)
+             .NotEmpty().WithMessage("کامنت نمی‌تواند خالی باشد")
+             .MinimumLength(5).WithMessage("کامنت باید حداقل ۵ کاراکتر باشد")
+             .MaximumLength(1000).WithMessage("کامنت نمی‌تواند بیشتر از ۱۰۰۰ کاراکتر باشد");
         }
     }
 }
