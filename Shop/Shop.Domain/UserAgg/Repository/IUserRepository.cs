@@ -10,6 +10,6 @@ namespace Shop.Domain.UserAgg.Repository
 {
     public interface IUserRepository : IBaseRepository<User>
     {
-
+        Task<User> GetUserWithWishlist(long userId);
     }
 }

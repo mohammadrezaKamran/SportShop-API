@@ -7,6 +7,7 @@ using Shop.Application.Orders.Finally;
 using Shop.Application.Orders.IncreaseItemCount;
 using Shop.Application.Orders.RemoveItem;
 using Shop.Application.Orders.SendOrder;
+using Shop.Application.Orders.SetTrackingNumber;
 using Shop.Application.Orders.Status;
 using Shop.Query.Orders.DTOs;
 using Shop.Query.Orders.GetByFilter;
@@ -81,4 +82,9 @@ internal class OrderFacade : IOrderFacade
     {
         return await _mediator.Send(command);
     }
+
+	public async Task<OperationResult> SetTrackingNumber(SetTrackingNumberCommand command)
+	{
+		return await _mediator.Send(command);
+	}
 }

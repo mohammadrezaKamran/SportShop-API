@@ -5,6 +5,7 @@ using Shop.Application.Orders.DecreaseItemCount;
 using Shop.Application.Orders.Finally;
 using Shop.Application.Orders.IncreaseItemCount;
 using Shop.Application.Orders.RemoveItem;
+using Shop.Application.Orders.SetTrackingNumber;
 using Shop.Application.Orders.Status;
 using Shop.Query.Orders.DTOs;
 
@@ -20,10 +21,10 @@ public interface IOrderFacade
     Task<OperationResult> FinallyOrder(OrderFinallyCommand command);
     Task<OperationResult> ChangeOrderStatus(ChangeOrderStatusCommand command);
     Task<OperationResult> SendOrder(long orderId);
- 
+	Task<OperationResult> SetTrackingNumber(SetTrackingNumberCommand command);
 
 
-    Task<OrderDto?> GetOrderById(long orderId);
+	Task<OrderDto?> GetOrderById(long orderId);
     Task<OrderFilterResult> GetOrdersByFilter(OrderFilterParams filterParams);
     Task<OrderDto?> GetCurrentOrder(long userId);
 }

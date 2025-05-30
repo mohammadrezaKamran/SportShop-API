@@ -54,11 +54,11 @@ public static class UserMapper
             Id = user.Id,
             CreationDate = user.CreationDate,
             Family = user.Family,
-            PhoneNumber = user.PhoneNumber,
-            AvatarName = user.AvatarName,          
+            PhoneNumber = user.PhoneNumber,        
             Email = user.Email,
             Gender = user.Gender,
-            Name = user.Name
+            Name = user.Name,
+                       
         };
     }
 }

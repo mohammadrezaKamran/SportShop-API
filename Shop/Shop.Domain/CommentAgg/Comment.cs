@@ -31,13 +31,13 @@ namespace Shop.Domain.CommentAgg
             NullOrEmptyDomainDataException.CheckString(text, nameof(text));
 
             Text = text;
-            UpdateDate = DateTime.Now;
+            UpdateDate = DateTime.UtcNow;
         }
 
         public void ChangeStatus(CommentStatus status)
         {
             Status = status;
-            UpdateDate = DateTime.Now;
+            UpdateDate = DateTime.UtcNow;
         }
     }
 

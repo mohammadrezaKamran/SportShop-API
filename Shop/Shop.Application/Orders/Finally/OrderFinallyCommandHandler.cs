@@ -25,9 +25,16 @@ public class OrderFinallyCommandHandler : IBaseCommandHandler<OrderFinallyComman
             var variant = await _productRepository.GetVariantById(item.ProductVariantId);
             if (variant == null)
                 return OperationResult.NotFound();
-            variant.DecreaseStock(item.Count);
-        }
-        order.Finally();
+			try
+			{
+				variant.DecreaseStock(item.Count);
+			}
+			catch (InvalidOperationException ex)
+			{
+				return OperationResult.Error(ex.Message);
+			}
+		}
+        order.Finally(request.TextForInvoice);
         await _repository.Save();
         return OperationResult.Success();
     }

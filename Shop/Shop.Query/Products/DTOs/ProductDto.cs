@@ -11,6 +11,7 @@ public class ProductDto : BaseDto
     public string ImageName { get; set; }
     public string Description { get; set; }
     public string BrandName { get; set; }
+    public bool IsSpecial {  get; set; }
     public ProductCategoryDto Category { get; set; }
     public ProductCategoryDto SubCategory { get; set; }
     public ProductCategoryDto? SecondarySubCategory { get; set; }
@@ -32,9 +33,8 @@ public class ProductCategoryDto
 }
 
 
-public class ProductVariantDto
+public class ProductVariantDto:BaseDto
 {
-    public long Id { get; set; }
     public long ProductId { get; set; }
     public string SKU { get; set; }
     public string? Color { get; set; }
@@ -45,3 +45,19 @@ public class ProductVariantDto
     public ProductVariantStatus VariantStatus { get; set; }
 }
 
+public class ProductVariantShopDto : BaseDto
+{
+	public long ProductId { get; set; }
+	public string SKU { get; set; }
+	public string? Color { get; set; }
+	public string? Size { get; set; }
+	public int StockQuantity { get; set; }
+	public decimal Price { get; set; }
+	public int? DiscountPercentage { get; set; }
+	public ProductVariantStatus VariantStatus { get; set; }
+
+	public decimal TotalPrice =>
+	  DiscountPercentage.HasValue
+	  ? Price - (Price * DiscountPercentage.Value / 100)
+	  : Price;
+}

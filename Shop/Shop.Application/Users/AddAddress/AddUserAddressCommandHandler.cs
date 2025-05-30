@@ -21,7 +21,16 @@ public class AddUserAddressCommandHandler:IBaseCommandHandler<AddUserAddressComm
 
         var address = new UserAddress(request.Shire, request.City, request.PostalCode, request.PostalAddress,
             request.PhoneNumber, request.Name, request.Family, request.NationalCode);
-        user.AddAddress(address);
+
+        try
+        {
+            user.AddAddress(address);
+        }
+        catch (InvalidOperationException ex)          // یا بهتر:  AddressAlreadySetException
+        {
+            return OperationResult.Error(ex.Message); // فقط همین نقطه به اپ برمی‌گردد
+        }
+
         await _repository.Save();
         return OperationResult.Success();
     }

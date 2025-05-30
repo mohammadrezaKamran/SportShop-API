@@ -5,6 +5,7 @@ using Microsoft.Extensions.Caching.Distributed;
 using Shop.Application.OTP;
 using Shop.Application.Users.AddToken;
 using Shop.Application.Users.ChangePassword;
+using Shop.Application.Users.ChangePasswordByAdmin;
 using Shop.Application.Users.Create;
 using Shop.Application.Users.Edit;
 using Shop.Application.Users.Register;
@@ -109,7 +110,7 @@ internal class UserFacade : IUserFacade
         return await _mediator.Send(command);
     }
 
-    public async Task<List<ProductDto?>> GetWishList(long userId)
+    public async Task<List<WishListDto>> GetWishList(long userId)
     {
         return await _mediator.Send(new GetWishListQuery(userId));
     }
@@ -118,4 +119,9 @@ internal class UserFacade : IUserFacade
     {
         return await _mediator.Send(command);
     }
+
+	public async Task<OperationResult> ChangePasswordByAdmin(ChangeUserPasswordByAdminCommand command)
+	{
+		return await _mediator.Send(command);
+	}
 }

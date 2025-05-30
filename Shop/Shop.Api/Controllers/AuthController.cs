@@ -13,6 +13,7 @@ using Shop.Application.Users.Register;
 using Shop.Application.Users.RemoveToken;
 using Shop.Presentation.Facade.Users;
 using Shop.Query.Users.DTOs;
+using System.Net;
 using UAParser;
 
 namespace Shop.Api.Controllers;
@@ -77,12 +78,12 @@ public class AuthController : ApiController
         if (result == null)
             return CommandResult(OperationResult<LoginResultDto?>.NotFound());
 
-        if (result.TokenExpireDate > DateTime.Now)
+        if (result.TokenExpireDate > DateTime.UtcNow)
         {
             return CommandResult(OperationResult<LoginResultDto>.Error("توکن هنوز منقضی نشده است"));
         }
 
-        if (result.RefreshTokenExpireDate < DateTime.Now)
+        if (result.RefreshTokenExpireDate < DateTime.UtcNow)
         {
             return CommandResult(OperationResult<LoginResultDto>.Error("زمان رفرش توکن به پایان رسیده است"));
         }
@@ -108,13 +109,25 @@ public class AuthController : ApiController
     private async Task<OperationResult<LoginResultDto?>> AddTokenAndGenerateJwt(UserDto user)
     {
         var uaParser = Parser.GetDefault();
-        var header = HttpContext.Request.Headers["user-agent"].ToString();
-        var device = "windows";
-        if (header != null)
+        var header = HttpContext.Request.Headers["User-Agent"].ToString();
+
+        // مقدار پیش‌فرض در صورت خطا
+        var device = "Unknown";
+
+        if (!string.IsNullOrWhiteSpace(header))
         {
             var info = uaParser.Parse(header);
-            device = $"{info.Device.Family}/{info.OS.Family} {info.OS.Major}.{info.OS.Minor} - {info.UA.Family}";
+
+            var deviceFamily = info.Device.Family;
+            var osFamily = info.OS.Family;
+            var osVersion = $"{info.OS.Major}.{info.OS.Minor}".TrimEnd('.');
+            var browser = info.UA.Family;
+
             
+            if (string.IsNullOrWhiteSpace(deviceFamily) || deviceFamily.Equals("Other", StringComparison.OrdinalIgnoreCase))
+                device = $"{osFamily} {osVersion} - {browser}";
+            else
+                device = $"{deviceFamily} / {osFamily} {osVersion} - {browser}";
         }
 
         var token = JwtTokenBuilder.BuildToken(user, _configuration);
@@ -123,19 +136,34 @@ public class AuthController : ApiController
         var hashJwt = Sha256Hasher.Hash(token);
         var hashRefreshToken = Sha256Hasher.Hash(refreshToken);
 
-        var ipAddress=HttpContext.Connection.RemoteIpAddress;
-        if(HttpContext.Request.Headers.ContainsKey("X-Forwarded-For"))
-        {
-            ipAddress = System.Net.IPAddress.Parse(HttpContext.Request.Headers["X-Forwarded-For"].ToString().Split(',')[0]);
-        }
-        if (ipAddress == null)
-            throw new Exception("Can't Find Client's IpAddress");
+        IPAddress? ipAddress = HttpContext.Connection.RemoteIpAddress;
 
-        var tokenResult = await _userFacade.AddToken(new AddUserTokenCommand(user.Id, hashJwt, hashRefreshToken, DateTime.Now.AddDays(7), DateTime.Now.AddDays(8), device,ipAddress.ToString()));
+        if (HttpContext.Request.Headers.TryGetValue("X-Forwarded-For", out var forwardedFor))
+        {
+            var ipString = forwardedFor.ToString().Split(',')[0].Trim();
+            if (IPAddress.TryParse(ipString, out var parsedIp))
+            {
+                ipAddress = parsedIp;
+            }
+        }
+
+        if (ipAddress == null)
+            throw new Exception("Can't find client's IP address.");
+
+        var tokenResult = await _userFacade.AddToken(new AddUserTokenCommand(
+            user.Id,
+            hashJwt,
+            hashRefreshToken,
+            DateTime.UtcNow.AddDays(7),
+            DateTime.UtcNow.AddDays(8),
+            device,
+            ipAddress.ToString()
+        ));
+
         if (tokenResult.Status != OperationResultStatus.Success)
             return OperationResult<LoginResultDto?>.Error();
 
-        return OperationResult<LoginResultDto?>.Success(new LoginResultDto()
+        return OperationResult<LoginResultDto?>.Success(new LoginResultDto
         {
             Token = token,
             RefreshToken = refreshToken

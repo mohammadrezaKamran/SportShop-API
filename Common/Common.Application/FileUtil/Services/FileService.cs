@@ -57,7 +57,7 @@ namespace Common.Application.FileUtil.Services
 
             var fileName = file.FileName;
 
-            fileName = Guid.NewGuid() + DateTime.Now.TimeOfDay.ToString()
+            fileName = Guid.NewGuid() + DateTime.UtcNow.TimeOfDay.ToString()
                                           .Replace(":", "")
                                           .Replace(".", "") + Path.GetExtension(fileName);
 

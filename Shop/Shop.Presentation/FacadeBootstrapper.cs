@@ -12,6 +12,7 @@ using Shop.Presentation.Facade.Users.Addresses;
 using Shop.Domain.Auth.OTP;
 using Common.Application.Validation;
 using Shop.Presentation.Facade.Report;
+using Shop.Presentation.Facade.Siteentities.SiteSettings;
 
 namespace Shop.Presentation.Facade;
 
@@ -30,5 +31,6 @@ public static class FacadeBootstrapper
         services.AddScoped<IUserFacade, UserFacade>();
         services.AddScoped<IUserAddressFacade, UserAddressFacade>();
         services.AddScoped<IReportFacade, ReportFacade>();
+        services.AddScoped<ISiteSettingFacade, SiteSettingFacade>();
     }
 }

@@ -11,7 +11,7 @@ namespace Shop.Domain.OrderAgg.ValueObjects
     {
         public OrderDiscount(string discountTitle, int discountAmount)
         {
-            DiscountTitle = discountTitle;
+            DiscountTitle = discountTitle.Trim().ToLower();
             DiscountAmount = discountAmount;
         }
 

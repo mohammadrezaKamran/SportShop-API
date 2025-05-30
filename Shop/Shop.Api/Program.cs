@@ -7,9 +7,17 @@ using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.HttpOverrides;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.OpenApi.Models;
+using Serilog;
 using Shop.Api.Infrastructure;
 using Shop.Api.Infrastructure.JwtUtil;
 using Shop.Config;
+
+Log.Logger = new LoggerConfiguration()
+	.WriteTo.Console()
+	.WriteTo.File("Logs/log.txt", rollingInterval: RollingInterval.Day)
+	.Enrich.FromLogContext()
+	.MinimumLevel.Debug()
+	.CreateLogger();
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -67,6 +75,9 @@ CommonBootstrapper.Init(builder.Services);
 builder.Services.AddTransient<IFileService, FileService>();
 
 builder.Services.AddJwtAuthentication(builder.Configuration);
+
+// SERILOG Instead of ILogger
+builder.Host.UseSerilog();
 
 var app = builder.Build();
 

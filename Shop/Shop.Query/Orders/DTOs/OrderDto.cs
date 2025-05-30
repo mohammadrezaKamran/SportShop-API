@@ -8,6 +8,8 @@ namespace Shop.Query.Orders.DTOs;
 public class OrderDto : BaseDto
 {
     public long UserId { get; set; }
+    public string? OrderNumber {  get; set; }
+    public string? TrackingNumber {  get; set; }
     public string UserFullName { get; set; }
     public OrderStatus Status { get; set; }
     public OrderDiscount? Discount { get; set; }
@@ -54,6 +56,8 @@ public class OrderFilterData : BaseDto
     public string? ShippingType { get; set; }
     public decimal TotalPrice { get; set; }
     public int TotalItemCount { get; set; }
+	public string? OrderNumber { get; set; }
+	public string? TrackingNumber { get; set; }
 }
 
 
@@ -63,6 +67,8 @@ public class OrderFilterParams : BaseFilterParam
     public DateTime? StartDate { get; set; }
     public DateTime? EndDate { get; set; }
     public OrderStatus? Status { get; set; }
+	public string? OrderNumber { get; set; }
+	public string? TrackingNumber { get; set; }
 
 }
 public class OrderFilterResult : BaseFilter<OrderFilterData, OrderFilterParams>

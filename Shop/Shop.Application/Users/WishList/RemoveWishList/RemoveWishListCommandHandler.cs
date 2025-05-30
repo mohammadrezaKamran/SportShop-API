@@ -20,7 +20,7 @@ namespace Shop.Application.Users.WishList.RemoveWishList
         public async Task<OperationResult> Handle(RemoveWishListCommand request, CancellationToken cancellationToken)
         {
 
-            var user = await _userRepository.GetTracking(request.UserId);
+            var user = await _userRepository.GetUserWithWishlist(request.UserId);
             if (user == null)
                 return OperationResult.NotFound();
 

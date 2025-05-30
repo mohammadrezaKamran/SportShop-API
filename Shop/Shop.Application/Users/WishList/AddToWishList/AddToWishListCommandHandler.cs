@@ -1,4 +1,6 @@
 ﻿using Common.Application;
+using Shop.Domain.ProductAgg;
+using Shop.Domain.UserAgg;
 using Shop.Domain.UserAgg.Repository;
 using System;
 using System.Collections.Generic;
@@ -19,9 +21,13 @@ namespace Shop.Application.Users.WishList.AddToWishList
 
         public async Task<OperationResult> Handle(AddToWishListCommand request, CancellationToken cancellationToken)
         {
-            var user = await _userRepository.GetTracking(request.UserId);
+            var user = await _userRepository.GetUserWithWishlist(request.UserId);
             if (user == null)
                 return OperationResult.NotFound();
+
+
+            if(user.WishLists.Any(i=>i.ProductId==request.ProductId))
+                return OperationResult.Error("قبلا به اضافه شده است");
 
             user.AddToWishlist(request.ProductId);
 

@@ -23,6 +23,6 @@ public class RemoveCategoryCommandHandler:IBaseCommandHandler<RemoveCategoryComm
             return OperationResult.Success();
         }
 
-        return OperationResult.Error("امکان حذف این دسته بندی وجود ندارد");
+        return OperationResult.Error("امکان حذف این دسته بندی وجود ندارد , اگر محصولی در این دسته بندی وجود دارد آن را پاک کنید");
     }
 }

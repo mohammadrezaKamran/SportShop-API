@@ -8,6 +8,7 @@ using Shop.Application.Orders.Checkout;
 using Shop.Application.Orders.DecreaseItemCount;
 using Shop.Application.Orders.IncreaseItemCount;
 using Shop.Application.Orders.RemoveItem;
+using Shop.Application.Orders.SetTrackingNumber;
 using Shop.Application.Orders.Status;
 using Shop.Domain.OrderAgg;
 using Shop.Domain.RoleAgg.Enums;
@@ -70,7 +71,15 @@ public class OrderController : ApiController
         return CommandResult(result);
     }
 
-    [HttpPost("Checkout")]
+	[HttpPost("TrackingNumber")]
+	public async Task<ApiResult> SetTrackingNumber(SetTrackingNumberCommand command)
+	{
+		var result = await _orderFacade.SetTrackingNumber(command);
+		return CommandResult(result);
+	}
+
+
+	[HttpPost("Checkout")]
     public async Task<ApiResult> CheckoutOrder(CheckoutOrderCommand command)
     {
         var result = await _orderFacade.OrderCheckOut(command);

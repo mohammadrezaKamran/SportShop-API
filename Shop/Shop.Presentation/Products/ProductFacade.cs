@@ -9,11 +9,13 @@ using Shop.Application.Products.ProductVariant.EditProductVariant;
 using Shop.Application.Products.ProductVariant.RemoveProductVariant;
 using Shop.Application.Products.ProductVariantStatusCommand;
 using Shop.Application.Products.RemoveImage;
+using Shop.Application.Products.Special;
 using Shop.Query.Products.DTOs;
 using Shop.Query.Products.GetByFilter;
 using Shop.Query.Products.GetById;
 using Shop.Query.Products.GetBySlug;
 using Shop.Query.Products.GetProductForShop;
+using Shop.Query.Products.GetProductVariantById;
 
 namespace Shop.Presentation.Facade.Products;
 
@@ -64,9 +66,7 @@ internal class ProductFacade : IProductFacade
 
     public async Task<ProductDto?> GetProductBySlug(string slug)
     {
-     
-            return await _mediator.Send(new GetProductBySlugQuery(slug));
-     
+        return await _mediator.Send(new GetProductBySlugQuery(slug));
     }
 
     public async Task<ProductFilterResult> GetProductsByFilter(ProductFilterParams filterParams)
@@ -98,4 +98,14 @@ internal class ProductFacade : IProductFacade
     {
         return await _mediator.Send(command);
     }
+
+    public async Task<ProductVariantDto?> GetProductVariantById(long productVariantId)
+    {
+        return await _mediator.Send(new GetProductVariantByIdQuery(productVariantId));
+    }
+
+	public async Task<OperationResult> SetProductSpecial(SetProductSpecialCommand command)
+	{
+		return await _mediator.Send(command);
+	}
 }

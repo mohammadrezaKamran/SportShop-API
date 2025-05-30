@@ -7,9 +7,9 @@ using Shop.Presentation.Facade.Comments;
 using Shop.Presentation.Facade.Report;
 using Shop.Presentation.Facade.Roles;
 using Shop.Query.Comments.DTOs;
+using Shop.Query.Report.ProductReport.Dto;
+using Shop.Query.Report.UserReport.Dto;
 using Shop.Query.Roles.DTOs;
-using Shop.Query.ShopReport.ProductReport.Dto;
-using Shop.Query.ShopReport.UserReport.Dto;
 
 namespace Shop.Api.Controllers;
 
@@ -22,7 +22,65 @@ public class ReportController : ApiController
         _reportFacade = reportFacade;
     }
 
-    [PermissionChecker(Permission.PanelAdmin)]
+    //[PermissionChecker(Permission.PanelAdmin)]
+    [HttpGet("TotalIncome")]
+    public async Task<ApiResult<IncomeReportDto?>> GetTotalIncomeReport()
+    {
+        var result = await _reportFacade.GetTotalIncomeReport();
+        return QueryResult(result);
+    }
+
+    //[PermissionChecker(Permission.PanelAdmin)]
+    [HttpGet("{MonthlyIncome}")]
+    public async Task<ApiResult<List<MonthlyIncomeReportDto?>>> GetMonthlyIncomeReport(int MonthCount)
+    {
+        var result = await _reportFacade.GetMonthlyIncomeReport(MonthCount);
+        return QueryResult(result);
+    }
+
+    //[PermissionChecker(Permission.PanelAdmin)]
+    [HttpGet("TodaysSales")]
+    public async Task<ApiResult<decimal>> GetTodaysSales()
+    {
+        var result = await _reportFacade.GetTodaysSales();
+        return QueryResult(result);
+    }
+
+    //[PermissionChecker(Permission.PanelAdmin)]
+    [HttpGet("NewOrder")]
+    public async Task<ApiResult<long>> GetNewOrder()
+    {
+        var result = await _reportFacade.GetNewOrder();
+        return QueryResult(result);
+    }
+
+    
+
+    //[PermissionChecker(Permission.PanelAdmin)]
+    [HttpGet("BestSellersProduct")]
+    public async Task<ApiResult<List<ProductSalesDto>>> GetBestSellersProduct()
+    {
+        var result = await _reportFacade.GetBestSellersProduct();
+        return QueryResult(result);
+    }
+
+    //[PermissionChecker(Permission.PanelAdmin)]
+    [HttpGet("CountOfProduct")]
+    public async Task<ApiResult<long>> GetCountOFProduct()
+    {
+        var result = await _reportFacade.GetCountOFProduct();
+        return QueryResult(result);
+    }
+
+    //[PermissionChecker(Permission.PanelAdmin)]
+    [HttpGet("OutOfStockProduct")]
+    public async Task<ApiResult<List<OutOfStockProductDto>>> GetOutOfStockProduct()
+    {
+        var result = await _reportFacade.GetOutOfStockProduct();
+        return QueryResult(result);
+    }
+
+    //[PermissionChecker(Permission.PanelAdmin)]
     [HttpGet("RecentUsers/{Days}")]
     public async Task<ApiResult<RecentUsersReportDto?>> GetRecentUserReport(int Days)
     {
@@ -30,27 +88,11 @@ public class ReportController : ApiController
         return QueryResult(result);
     }
 
-    [PermissionChecker(Permission.PanelAdmin)]
-    [HttpGet("Products")]
-    public async Task<ApiResult<List<ProductReportDto?>>> GetAllProductReport()
+    //[PermissionChecker(Permission.PanelAdmin)]
+    [HttpGet("LatestComment")]
+    public async Task<ApiResult<List<LatestCommentDto>>> GetLatestComment()
     {
-        var result = await _reportFacade.GetAllProductReport();
-        return QueryResult(result);
-    }
-
-    [PermissionChecker(Permission.PanelAdmin)]
-    [HttpGet("MonthlyIncome/{MonthCount}")]
-    public async Task<ApiResult<List<MonthlyIncomeReportDto?>>> GetMonthlyIncomeReport(int MonthCount)
-    {
-        var result = await _reportFacade.GetMonthlyIncomeReport(MonthCount);
-        return QueryResult(result);
-    }
-
-    [PermissionChecker(Permission.PanelAdmin)]
-    [HttpGet("TotalIncome")]
-    public async Task<ApiResult<IncomeReportDto?>> GetTotalIncomeReport()
-    {
-        var result = await _reportFacade.GetTotalIncomeReport();
+        var result = await _reportFacade.GetLatestComment();
         return QueryResult(result);
     }
 

@@ -10,5 +10,12 @@ namespace Shop.Infrastructure.Persistent.Ef.UserAgg
 		public UserRepository(ShopContext context) : base(context)
 		{
 		}
+
+        public async Task<User> GetUserWithWishlist(long userId)
+        {
+            return await Context.Users.AsTracking()
+            .Include(u => u.WishLists)
+            .FirstOrDefaultAsync(u => u.Id == userId);
+        }
     }
 }

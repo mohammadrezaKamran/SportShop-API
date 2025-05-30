@@ -2,6 +2,7 @@
 using Shop.Application.OTP;
 using Shop.Application.Users.AddToken;
 using Shop.Application.Users.ChangePassword;
+using Shop.Application.Users.ChangePasswordByAdmin;
 using Shop.Application.Users.Create;
 using Shop.Application.Users.Edit;
 using Shop.Application.Users.Register;
@@ -22,7 +23,8 @@ namespace Shop.Presentation.Facade.Users
         Task<OperationResult> AddToken(AddUserTokenCommand command);
         Task<OperationResult> RemoveToken(RemoveUserTokenCommand command);
         Task<OperationResult> ChangePassword(ChangeUserPasswordCommand command);
-        Task<OperationResult> AddToWishList(AddToWishListCommand command);
+		Task<OperationResult> ChangePasswordByAdmin(ChangeUserPasswordByAdminCommand command);
+		Task<OperationResult> AddToWishList(AddToWishListCommand command);
         Task<OperationResult> RemoveWishList(RemoveWishListCommand command);
         Task<OperationResult> SendOTP(SendOtpCommand command);
 
@@ -30,7 +32,7 @@ namespace Shop.Presentation.Facade.Users
         Task<UserDto?> GetUserById(long userId);
         Task<UserTokenDto?> GetUserTokenByRefreshToken(string refreshToken);
         Task<UserTokenDto?> GetUserTokenByJwtToken(string jwtToken);
-        Task<List<ProductDto?>> GetWishList(long userId);
+        Task<List<WishListDto>> GetWishList(long userId);
         Task<UserFilterResult> GetUserByFilter(UserFilterParams filterParams);
     }
 }

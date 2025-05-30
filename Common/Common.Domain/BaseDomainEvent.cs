@@ -8,7 +8,7 @@ namespace Common.Domain
 
         public BaseDomainEvent()
         {
-            CreationDate = DateTime.Now;
+            CreationDate = DateTime.UtcNow;
         }
     }
 }

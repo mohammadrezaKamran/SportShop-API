@@ -32,76 +32,97 @@ public class ApiCustomExceptionHandlerMiddleware
         _logger = logger;
     }
 
-    public async Task Invoke(HttpContext context)
-    {
-        string message = null;
-        HttpStatusCode httpStatusCode = HttpStatusCode.InternalServerError;
-        AppStatusCode apiStatusCode = AppStatusCode.ServerError;
+	public async Task Invoke(HttpContext context)
+	{
+		string message = null;
+		HttpStatusCode httpStatusCode = HttpStatusCode.InternalServerError;
+		AppStatusCode apiStatusCode = AppStatusCode.ServerError;
 
-        try
-        {
-            await _next(context);
-        }
-        catch (InvalidDomainDataException exception)
-        {
-            _logger.LogError(exception, exception.Message);
-            apiStatusCode = AppStatusCode.LogicError;
-            SetErrorMessage(exception);
-            await WriteToResponseAsync();
-        }
-        catch (InvalidCommandException exception)
-        {
-            _logger.LogError(exception, exception.Message);
-            httpStatusCode = HttpStatusCode.BadRequest;
-            SetErrorMessage(exception);
-            await WriteToResponseAsync();
-        }
-        catch (Exception exception)
-        {
-            _logger.LogError(exception, exception.Message);
+		try
+		{
+			await _next(context);
+		}
+		catch (InvalidDomainDataException ex)
+		{
+			_logger.LogError(ex, ex.Message);
+			httpStatusCode = HttpStatusCode.BadRequest;
+			apiStatusCode = AppStatusCode.LogicError;
+			SetErrorMessage(ex);
+			await WriteToResponseAsync();
+		}
+		catch (InvalidCommandException ex)
+		{
+			_logger.LogError(ex, ex.Message);
+			httpStatusCode = HttpStatusCode.BadRequest;
+			apiStatusCode = AppStatusCode.LogicError;
+			SetErrorMessage(ex);
+			await WriteToResponseAsync();
+		}
+		catch (OperationCanceledException ex)
+		{
+			_logger.LogWarning(ex, "Request was cancelled.");
+			httpStatusCode = HttpStatusCode.BadRequest;
+			apiStatusCode = AppStatusCode.BadRequest;
+			message = "Request was cancelled.";
+			await WriteToResponseAsync();
+		}
+		catch (Exception ex)
+		{
+			_logger.LogError(ex, ex.Message);
+			httpStatusCode = HttpStatusCode.InternalServerError;
+			apiStatusCode = AppStatusCode.ServerError;
+			SetErrorMessage(ex);
+			await WriteToResponseAsync();
+		}
 
-            SetErrorMessage(exception);
-            await WriteToResponseAsync();
-        }
+		void SetErrorMessage(Exception exception)
+		{
+			if (_env.IsDevelopment())
+			{
+				var dic = new Dictionary<string, string?>
+				{
+					["Exception"] = exception.Message,
+					["StackTrace"] = exception.StackTrace
+				};
 
-        void SetErrorMessage(Exception exception)
-        {
-            message = exception.Message;
-            if (_env.IsDevelopment())
-            {
-                var dic = new Dictionary<string, string>
-                {
-                    ["Exception"] = exception.Message,
-                    ["StackTrace"] = exception.StackTrace,
-                };
-                if (exception.InnerException != null)
-                {
-                    dic.Add("InnerException.Exception", exception.InnerException.Message);
-                    dic.Add("InnerException.StackTrace", exception.InnerException.StackTrace);
-                }
+				if (exception.InnerException != null)
+				{
+					dic.Add("InnerException.Exception", exception.InnerException.Message);
+					dic.Add("InnerException.StackTrace", exception.InnerException.StackTrace);
+				}
 
-                message = JsonConvert.SerializeObject(dic);
-            }
-        }
-        async Task WriteToResponseAsync()
-        {
-            if (context.Response.HasStarted)
-                throw new InvalidOperationException("The response has already started, the http status code middleware will not be executed.");
+				message = JsonConvert.SerializeObject(dic, Formatting.Indented);
+			}
+			else
+			{
+				message = "An unexpected error occurred.";
+			}
+		}
 
-            var result = new ApiResult()
-            {
-                IsSuccess = false,
-                MetaData = new()
-                {
-                    AppStatusCode = apiStatusCode,
-                    Message = message
-                }
-            };
-            var json = JsonConvert.SerializeObject(result);
+		async Task WriteToResponseAsync()
+		{
+			if (context.Response.HasStarted)
+			{
+				_logger.LogWarning("The response has already started, the http status code middleware will not be executed.");
+				return;
+			}
 
-            context.Response.StatusCode = (int)httpStatusCode;
-            context.Response.ContentType = "application/json";
-            await context.Response.WriteAsync(json);
-        }
-    }
+			var result = new ApiResult
+			{
+				IsSuccess = false,
+				MetaData = new()
+				{
+					AppStatusCode = apiStatusCode,
+					Message = message
+				}
+			};
+
+			var json = JsonConvert.SerializeObject(result, Formatting.Indented);
+
+			context.Response.StatusCode = (int)httpStatusCode;
+			context.Response.ContentType = "application/json";
+			await context.Response.WriteAsync(json);
+		}
+	}
+
 }

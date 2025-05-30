@@ -12,7 +12,7 @@ namespace Shop.Application.Products.Edit
     public class EditProductCommand : IBaseCommand
     {
         public EditProductCommand(long productId, string title, IFormFile? imageFile, string description, long categoryId,
-            long subCategoryId,ProductStatus status,long secondarySubCategoryId, string slug, SeoData seoData, string brandName, Dictionary<string, string> specifications)
+            long? subCategoryId,ProductStatus status,long? secondarySubCategoryId, string slug, SeoData seoData, string brandName, Dictionary<string, string> specifications)
         {
             ProductId = productId;
             Title = title;
@@ -33,8 +33,8 @@ namespace Shop.Application.Products.Edit
         public IFormFile? ImageFile { get; private set; }
         public string Description { get; private set; }
         public long CategoryId { get; private set; }
-        public long SubCategoryId { get; private set; }
-        public long SecondarySubCategoryId { get; private set; }
+        public long? SubCategoryId { get; private set; }
+        public long? SecondarySubCategoryId { get; private set; }
         public string Slug { get; private set; }
         public SeoData SeoData { get; private set; }
         public string BrandName {  get; private set; }

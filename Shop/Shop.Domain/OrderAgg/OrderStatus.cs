@@ -5,6 +5,7 @@
         Pending,
         Finally,
         Shipping,
-        Rejected
+        Rejected,
+        Completed
     }
 }

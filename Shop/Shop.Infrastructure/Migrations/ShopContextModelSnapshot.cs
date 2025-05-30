@@ -134,8 +134,16 @@ namespace Shop.Infrastructure.Migrations
                     b.Property<DateTime?>("LastUpdate")
                         .HasColumnType("datetime2");
 
+                    b.Property<string>("OrderNumber")
+                        .HasMaxLength(50)
+                        .HasColumnType("nvarchar(50)");
+
                     b.Property<int>("Status")
                         .HasColumnType("int");
+
+                    b.Property<string>("TrackingNumber")
+                        .HasMaxLength(100)
+                        .HasColumnType("nvarchar(100)");
 
                     b.Property<long>("UserId")
                         .HasColumnType("bigint");
@@ -157,7 +165,8 @@ namespace Shop.Infrastructure.Migrations
 
                     b.Property<string>("BrandName")
                         .IsRequired()
-                        .HasColumnType("nvarchar(max)");
+                        .HasMaxLength(100)
+                        .HasColumnType("nvarchar(100)");
 
                     b.Property<long>("CategoryId")
                         .HasColumnType("bigint");
@@ -167,12 +176,16 @@ namespace Shop.Infrastructure.Migrations
 
                     b.Property<string>("Description")
                         .IsRequired()
+                        .HasMaxLength(5000)
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("ImageName")
                         .IsRequired()
                         .HasMaxLength(110)
                         .HasColumnType("nvarchar(110)");
+
+                    b.Property<bool>("IsSpecial")
+                        .HasColumnType("bit");
 
                     b.Property<long?>("SecondarySubCategoryId")
                         .HasColumnType("bigint");
@@ -186,7 +199,7 @@ namespace Shop.Infrastructure.Migrations
                     b.Property<int>("Status")
                         .HasColumnType("int");
 
-                    b.Property<long>("SubCategoryId")
+                    b.Property<long?>("SubCategoryId")
                         .HasColumnType("bigint");
 
                     b.Property<string>("Title")
@@ -274,6 +287,42 @@ namespace Shop.Infrastructure.Migrations
                     b.HasKey("Id");
 
                     b.ToTable("ShippingMethods", "shippingMethod");
+                });
+
+            modelBuilder.Entity("Shop.Domain.SiteEntities.SiteSetting", b =>
+                {
+                    b.Property<long>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("bigint");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<long>("Id"), 1L, 1);
+
+                    b.Property<DateTime>("CreationDate")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("Description")
+                        .IsRequired()
+                        .HasMaxLength(500)
+                        .HasColumnType("nvarchar(500)");
+
+                    b.Property<int?>("Group")
+                        .HasColumnType("int");
+
+                    b.Property<string>("Key")
+                        .IsRequired()
+                        .HasMaxLength(100)
+                        .HasColumnType("nvarchar(100)");
+
+                    b.Property<string>("Value")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("Key")
+                        .IsUnique();
+
+                    b.ToTable("SiteSettings", "siteSettings");
                 });
 
             modelBuilder.Entity("Shop.Domain.SiteEntities.Slider", b =>

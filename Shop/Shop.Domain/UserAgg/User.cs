@@ -48,7 +48,7 @@ namespace Shop.Domain.UserAgg
         public List<Wallet> Wallets { get; }
         public UserAddress Address { get; private set; }
         public List<UserToken> Tokens { get; }
-        public List<WishList> WishLists { get; }
+        public List<WishList> WishLists { get; }= new List<WishList>();
 
         public void Edit(string name, string family, string phoneNumber, string email,
             Gender gender, IUserDomainService userDomainService)
@@ -82,7 +82,7 @@ namespace Shop.Domain.UserAgg
         public void AddAddress(UserAddress address)
         {
             if (Address != null)
-                throw new InvalidOperationException("Address is already set.");
+                throw new InvalidOperationException("آدرس قبلا ثبت شده");
 
             address.UserId = Id;
             Address = address;
@@ -124,9 +124,9 @@ namespace Shop.Domain.UserAgg
         public void AddToken(string hashJwtToken, string hashRefreshToken, DateTime tokenExpireDate, DateTime refreshTokenExpireDate, string device , string ipAddress)
         {
             // حذف توکن‌های منقضی‌شده
-            Tokens.RemoveAll(t => t.RefreshTokenExpireDate <= DateTime.Now);
+            Tokens.RemoveAll(t => t.RefreshTokenExpireDate <= DateTime.UtcNow);
 
-            var activeTokenCount = Tokens.Count(c => c.RefreshTokenExpireDate > DateTime.Now);
+            var activeTokenCount = Tokens.Count(c => c.RefreshTokenExpireDate > DateTime.UtcNow);
             if (activeTokenCount >= 3)
                 throw new InvalidDomainDataException("امکان استفاده از 4 دستگاه همزمان وجود ندارد");
 
@@ -152,8 +152,6 @@ namespace Shop.Domain.UserAgg
 
         public void AddToWishlist(long productId)
         {
-            if (WishLists.Any(i => i.ProductId == productId))
-                throw new Exception("قبلا به اضافه شده است");
 
             WishLists.Add(new WishList(productId));
         }

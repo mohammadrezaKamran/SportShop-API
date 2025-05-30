@@ -23,21 +23,32 @@ internal static class OrderMapper
             ShippingMethod = order.ShippingMethod,
             UserFullName = "",
             UserId = order.UserId,
+            OrderNumber = order.OrderNumber,
+            TrackingNumber = order.TrackingNumber,
         };
     }
 
     public static async Task<List<OrderItemDto>> GetOrderItems(this OrderDto orderDto, DapperContext dapperContext)
     {
         using var connection = dapperContext.CreateConnection();
-        var sql = @$"SELECT o.Id, s.ShopName ,o.OrderId,o.ProductVariantId,o.Count,o.price,
-                          p.Title as ProductTitle , p.Slug as ProductSlug ,
-                          p.ImageName as ProductImageName
-                    FROM {dapperContext.OrderItems} o
-                    Inner Join {dapperContext.Products} p on i.ProductId=p.Id
-                    where o.OrderId=@orderId";
 
-        var result = await connection
-            .QueryAsync<OrderItemDto>(sql, new {orderId = orderDto.Id});
+        var sql = @$"
+        SELECT 
+            o.Id,
+            o.OrderId,
+            o.ProductVariantId,
+            o.Count,
+            o.Price,
+            p.Title as ProductTitle,
+            p.Slug as ProductSlug,
+            p.ImageName as ProductImageName
+        FROM {dapperContext.OrderItems} o
+        INNER JOIN {dapperContext.ProductVariants} pv ON o.ProductVariantId = pv.Id
+        INNER JOIN {dapperContext.Products} p ON pv.ProductId = p.Id
+        WHERE o.OrderId = @orderId";
+
+        var result = await connection.QueryAsync<OrderItemDto>(sql, new { orderId = orderDto.Id });
+
         return result.ToList();
     }
     public static OrderFilterData MapFilterData(this Order order, ShopContext context)
@@ -58,7 +69,9 @@ internal static class OrderMapper
             TotalItemCount = order.ItemCount,
             TotalPrice = order.TotalPrice,
             UserFullName = userFullName,
-            UserId = order.UserId
+            UserId = order.UserId,
+            OrderNumber=order.OrderNumber,
+            TrackingNumber=order.TrackingNumber,
         };
     }
 }

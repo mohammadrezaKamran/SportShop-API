@@ -1,6 +1,7 @@
 ﻿using Common.Domain;
 using Common.Domain.Exceptions;
 using Shop.Domain.OrderAgg.ValueObjects;
+using Common.Domain.Utils;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -29,9 +30,12 @@ namespace Shop.Domain.OrderAgg
         public OrderAddress? Address { get; private set; }
         public OrderShippingMethod? ShippingMethod { get; private set; }
         public List<OrderItem> Items { get; private set; }
-        public DateTime? LastUpdate { get; set; }
+        public DateTime? LastUpdate { get; private set; }
 
-        public decimal TotalPrice
+		public string? OrderNumber { get; private set; }
+        public string? TrackingNumber {  get; private set; }
+
+		public decimal TotalPrice
         {
             get
             {
@@ -59,7 +63,9 @@ namespace Shop.Domain.OrderAgg
                 return;
             }
             Items.Add(item);
-        }
+
+			UpdateLastModified();
+		}
 
         public void RemoveItem(long itemId)
         {
@@ -68,9 +74,11 @@ namespace Shop.Domain.OrderAgg
             var currentItem = Items.FirstOrDefault(f => f.Id == itemId);
             if (currentItem != null)
                 Items.Remove(currentItem);
-        }
 
-        public void IncreaseItemCount(long itemId, int count)
+			UpdateLastModified();
+		}
+
+        public void IncreaseItemCount(long itemId, int count, int availableStock)
         {
             ChangeOrderGuard();
 
@@ -78,8 +86,13 @@ namespace Shop.Domain.OrderAgg
             if (currentItem == null)
                 throw new NullOrEmptyDomainDataException();
 
-            currentItem.IncreaseCount(count);
-        }
+			var newCount = currentItem.Count + count;
+			if (newCount > availableStock)
+				throw new InvalidDomainDataException("تعداد بیشتر از موجودی است.");
+
+			currentItem.IncreaseCount(count);
+			UpdateLastModified();
+		}
 
         public void DecreaseItemCount(long itemId, int count)
         {
@@ -90,7 +103,8 @@ namespace Shop.Domain.OrderAgg
                 throw new NullOrEmptyDomainDataException();
 
             currentItem.DecreaseCount(count);
-        }
+			UpdateLastModified();
+		}
 
         public void ChangeCountItem(long itemId, int newCount)
         {
@@ -101,40 +115,85 @@ namespace Shop.Domain.OrderAgg
                 throw new NullOrEmptyDomainDataException();
 
             currentItem.ChangeCount(newCount);
-        }
+			UpdateLastModified();
+		}
 
-        public void Finally()
+        public void Finally(string TextForInvoice)
         {
             if (!Items.Any())
                 throw new InvalidDomainDataException("سفارشی بدون آیتم نمی‌تواند ثبت نهایی شود");
 
             Status = OrderStatus.Finally;
-            LastUpdate=DateTime.Now;
+			UpdateLastModified();
+
+			GenerateOrderNumber(TextForInvoice);
             AddDomainEvent(new OrderFinalized(Id));
         }
-        public void ChangeStatus(OrderStatus status)
-        {
-            Status = status;
-            LastUpdate = DateTime.Now;
-        }
+		public void ChangeStatus(OrderStatus status)
+		{
+            if (status == OrderStatus.Shipping)
+                throw new InvalidDomainDataException("بعد از ثبت کد رهگیری به صورت اتوماتیک به این وضعیت تغییر میکند");
 
-        public void SetAddressAndShippingMethod(OrderAddress orderAddress,OrderShippingMethod shippingMethod)
+			Status = status;
+			LastUpdate = DateTime.UtcNow;
+			UpdateLastModified();
+		}
+
+		public void SetAddressAndShippingMethod(OrderAddress orderAddress,OrderShippingMethod shippingMethod)
         {
             ChangeOrderGuard();
 
             Address = orderAddress;
             ShippingMethod = shippingMethod;
-        }
+			UpdateLastModified();
+		}
 
-        public void ChangeOrderGuard()
-        {
-            if (Status != OrderStatus.Pending)
-                throw new InvalidDomainDataException("امکان ویرایش این سفارش وجود ندارد");
-        }
+
         public void ClearItems()
         {
             ChangeOrderGuard();
             Items.Clear();
-        }
-    }
+			UpdateLastModified();
+		}
+
+        private void GenerateOrderNumber(string TextForInvoice)
+        {
+			if (string.IsNullOrEmpty(TextForInvoice))
+				throw new NullOrEmptyDomainDataException();
+
+			if (OrderNumber != null)
+				throw new NullOrEmptyDomainDataException("شماره فاکتور قبلا ثبت شده");
+
+			OrderNumber = TextForInvoice.Trim() + TextHelper.GenerateCode(5);
+
+		}
+		public void SetTrackingNumber(string trackingNumber)
+		{
+
+			if (string.IsNullOrWhiteSpace(trackingNumber))
+				throw new NullOrEmptyDomainDataException("کد رهگیری نمی‌تواند خالی باشد.");
+
+			if (Status == OrderStatus.Completed)
+				throw new InvalidDomainDataException("سفارش تکمیل‌شده قابل تغییر نیست");
+
+			TrackingNumber = trackingNumber.Trim();
+            Status = OrderStatus.Shipping;
+			UpdateLastModified();
+		}
+		public void SetDiscount(OrderDiscount discount)
+		{
+			ChangeOrderGuard();
+			Discount = discount;
+			UpdateLastModified();
+		}
+		private void UpdateLastModified()
+		{
+			LastUpdate = DateTime.UtcNow;
+		}
+		public void ChangeOrderGuard()
+		{
+			if (Status != OrderStatus.Pending)
+				throw new InvalidDomainDataException("امکان ویرایش این سفارش وجود ندارد");
+		}
+	}
 }

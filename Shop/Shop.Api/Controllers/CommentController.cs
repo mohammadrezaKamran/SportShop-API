@@ -32,14 +32,14 @@ public class CommentController : ApiController
         return QueryResult(result);
     }
     [HttpGet("productComments")]
-    public async Task<ApiResult<CommentFilterResult>> GetProductComments(int pageId = 1, int take = 10, int productId = 0)
+	public async Task<ApiResult<CommentFilterResult>> GetProductComments(int pageId = 1, int take = 10, long? productId =0)
     {
         var result = await _commentFacade.GetCommentsByFilter(new CommentFilterParams()
         {
             ProductId = productId,
             PageId = pageId,
             Take = take,
-            CommentStatus = CommentStatus.Accepted
+            //CommentStatus = CommentStatus.Accepted
         });
         return QueryResult(result);
     }

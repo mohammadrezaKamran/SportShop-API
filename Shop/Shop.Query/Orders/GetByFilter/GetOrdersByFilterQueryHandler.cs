@@ -31,8 +31,13 @@ internal class GetOrdersByFilterQueryHandler : IQueryHandler<GetOrdersByFilterQu
         if (@params.EndDate != null)
             result = result.Where(r => r.CreationDate.Date <= @params.EndDate.Value.Date);
 
+		if (@params.OrderNumber != null)
+			result = result.Where(r => r.OrderNumber == @params.OrderNumber.Trim());
 
-        var skip = (@params.PageId - 1) * @params.Take;
+		if (@params.TrackingNumber != null)
+			result = result.Where(r => r.TrackingNumber == @params.TrackingNumber.Trim());
+
+		var skip = (@params.PageId - 1) * @params.Take;
         var model = new OrderFilterResult()
         {
             Data = await result.Skip(skip).Take(@params.Take)

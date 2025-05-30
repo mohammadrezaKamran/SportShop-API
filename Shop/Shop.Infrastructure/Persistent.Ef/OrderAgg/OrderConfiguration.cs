@@ -13,7 +13,13 @@ internal class OrderConfiguration : IEntityTypeConfiguration<Order>
         builder.HasKey(b => b.Id);
         builder.HasIndex(b => b.UserId);
 
-        builder.OwnsMany(b => b.Items, option =>
+		builder.Property(c => c.OrderNumber)
+				.HasMaxLength(50);
+
+		builder.Property(c => c.TrackingNumber)
+				.HasMaxLength(100);
+
+		builder.OwnsMany(b => b.Items, option =>
         {
             option.ToTable("Items", "order");
             option.HasKey(b => b.Id);

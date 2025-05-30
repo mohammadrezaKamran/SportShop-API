@@ -7,6 +7,7 @@ using Shop.Domain.CommentAgg;
 using Shop.Domain.OrderAgg.Repository;
 using Shop.Domain.ProductAgg.Repository;
 using Shop.Domain.RoleAgg.Repository;
+using Shop.Domain.SiteEntities;
 using Shop.Domain.SiteEntities.Repositories;
 using Shop.Domain.UserAgg.Repository;
 using Shop.Infrastructure._Utilities.MediatR;
@@ -37,6 +38,7 @@ namespace Shop.Infrastructure
             services.AddTransient<IUserRepository, UserRepository>();
             services.AddTransient<ICommentRepository, CommentRepository>();
             services.AddTransient<IShippingMethodRepository, ShippingMethodRepository>();
+            services.AddTransient<ISiteSettingRepository, SiteSettingRepository>();
 
             services.AddSingleton<ICustomPublisher, CustomPublisher>();
             services.AddScoped<ISmsSender,KaveNegarSmsSender>();

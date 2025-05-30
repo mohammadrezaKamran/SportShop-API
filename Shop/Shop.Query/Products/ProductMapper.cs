@@ -24,11 +24,13 @@ public static class ProductMapper
             BrandName = product.BrandName,
             SeoData = product.SeoData,
             Status=product.Status,
+            IsSpecial = product.IsSpecial,
 
             ProductVariants = product.ProductVariants?
             .Select(variant => new ProductVariantDto
             {
                 Id = variant.Id,
+                CreationDate= variant.CreationDate,
                 ProductId = variant.ProductId,
                 SKU = variant.SKU,
                 Color = variant.Color,
@@ -57,10 +59,11 @@ public static class ProductMapper
             {
                 Id = product.CategoryId
             },
-            SubCategory = new()
+            SubCategory = product.SubCategoryId != null ? new()
             {
-                Id = product.SubCategoryId
-            },
+                Id = (long)product.SubCategoryId
+            } : null,
+
             SecondarySubCategory = product.SecondarySubCategoryId != null ? new()
             {
                 Id = (long)product.SecondarySubCategoryId
@@ -109,6 +112,6 @@ public static class ProductMapper
                 product.SecondarySubCategory = secondarySubCategory;
         }
         product.Category = categories.First(r => r.Id == product.Category.Id);
-        product.SubCategory = categories.First(r => r.Id == product.SubCategory.Id);
+        product.SubCategory = categories.FirstOrDefault(r => r.Id == product.SubCategory.Id);
     }
 }

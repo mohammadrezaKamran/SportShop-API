@@ -11,6 +11,10 @@ namespace Shop.Application.Comments.Edit
              .NotEmpty().WithMessage("کامنت نمی‌تواند خالی باشد")
              .MinimumLength(5).WithMessage("کامنت باید حداقل ۵ کاراکتر باشد")
              .MaximumLength(1000).WithMessage("کامنت نمی‌تواند بیشتر از ۱۰۰۰ کاراکتر باشد");
-        }
+
+			RuleFor(r => r.CommentId)
+			.NotNull()
+			.NotEmpty().ExclusiveBetween(0, long.MaxValue).WithMessage(ValidationMessages.required("کامنت انتخاب نشده"));
+		}
     }
 }

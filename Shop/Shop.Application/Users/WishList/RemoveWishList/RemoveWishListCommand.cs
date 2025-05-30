@@ -7,7 +7,10 @@ using System.Threading.Tasks;
 
 namespace Shop.Application.Users.WishList.RemoveWishList
 {
-    public record RemoveWishListCommand(long ProductId,long UserId):IBaseCommand;
-    
-    
+    public class RemoveWishListCommand : IBaseCommand
+    {
+        public long UserId { get; set; }
+        public long ProductId { get; set; }
+
+    }
 }

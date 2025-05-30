@@ -15,7 +15,7 @@ public class ProductRepository : BaseRepository<Product>, IProductRepository
     public async Task<ProductVariant?> GetVariantById(long variantId)
     {
         var product = await Context.Products
-     .Include(p => p.ProductVariants)
+     .Include(p => p.ProductVariants).AsTracking()
      .FirstOrDefaultAsync(p => p.ProductVariants.Any(v => v.Id == variantId));
 
         return product?.ProductVariants.FirstOrDefault(v => v.Id == variantId);

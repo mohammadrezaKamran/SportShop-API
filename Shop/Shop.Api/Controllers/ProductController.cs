@@ -13,6 +13,7 @@ using Shop.Application.Products.ProductVariant.EditProductVariant;
 using Shop.Application.Products.ProductVariant.RemoveProductVariant;
 using Shop.Application.Products.ProductVariantStatusCommand;
 using Shop.Application.Products.RemoveImage;
+using Shop.Application.Products.Special;
 using Shop.Domain.RoleAgg.Enums;
 using Shop.Presentation.Facade.Orders;
 using Shop.Presentation.Facade.Products;
@@ -49,6 +50,14 @@ public class ProductController : ApiController
     public async Task<ApiResult<ProductDto?>> GetProductById(long productId)
     {
         var product = await _productFacade.GetProductById(productId);
+        return QueryResult(product);
+    }
+
+    [AllowAnonymous]
+    [HttpGet("ProductVariant/{productVariantId}")]
+    public async Task<ApiResult<ProductVariantDto?>> GetProductVariantById(long productVariantId)
+    {
+        var product = await _productFacade.GetProductVariantById(productVariantId);
         return QueryResult(product);
     }
 
@@ -96,7 +105,20 @@ public class ProductController : ApiController
 
         return CommandResult(result);
     }
-    [HttpPut("ProductVariant")]
+
+	[HttpPost("Product/Special")]
+	public async Task<ApiResult> SetProductSpecial(SetProductSpecialCommand command)
+	{
+        var result = await _productFacade.SetProductSpecial(new SetProductSpecialCommand()
+        {
+            ProductId=command.ProductId,
+            IsSpecial=command.IsSpecial
+        });
+
+		return CommandResult(result);
+	}
+
+	[HttpPut("ProductVariant")]
     public async Task<ApiResult> EditProductVariant(EditProductVariantViewModel command)
     {
         var result = await _productFacade.EditProductVariant(new EditProductVariantCommand()
@@ -114,14 +136,18 @@ public class ProductController : ApiController
         return CommandResult(result);
     }
 
-    [HttpDelete("ProductVariant")]
-    public async Task<ApiResult> RemoveProductVariant(RemoveProductVariantCommand command)
+    [HttpDelete("ProductVariant/{productId}/{productVariantId}")]
+    public async Task<ApiResult> RemoveProductVariant(long productId,long productVariantId)
     {
-        var result = await _productFacade.RemoveProductVariant(command);
+        var result = await _productFacade.RemoveProductVariant(new RemoveProductVariantCommand()
+        {
+            ProductId=productId,
+            ProductVariantId=productVariantId
+        });
         return CommandResult(result);
     }
 
-    [HttpPost("ChangeStatus")]
+    [HttpPut("ProductVariant/ChangeStatus")]
     public async Task<ApiResult> ChangeProductVariantStatus(ChangeProductVariantStatusCommand command)
     {
         var result = await _productFacade.ChangeProductVariantStatus(command);

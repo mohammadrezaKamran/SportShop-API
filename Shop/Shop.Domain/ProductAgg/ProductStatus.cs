@@ -5,6 +5,8 @@ public enum ProductStatus
 
      Published,
 
+     Draft,
+
      Disabled
 }
 public enum ProductVariantStatus

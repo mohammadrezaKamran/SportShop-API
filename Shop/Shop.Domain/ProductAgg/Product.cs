@@ -22,10 +22,11 @@ namespace Shop.Domain.ProductAgg
         public string ImageName { get; private set; }
         public string Description { get; private set; }
         public long CategoryId { get; private set; }
-        public long SubCategoryId { get; private set; }
+        public long? SubCategoryId { get; private set; }
         public long? SecondarySubCategoryId { get; private set; }
         public string Slug { get; private set; }
-        public SeoData SeoData { get; private set; }
+        public bool IsSpecial { get; set; } = false;
+		public SeoData SeoData { get; private set; }
         public string BrandName { get; private set; }
         public List<ProductVariant> ProductVariants { get; private set; } = new List<ProductVariant>();
         public ProductStatus Status { get; private set; }
@@ -33,7 +34,7 @@ namespace Shop.Domain.ProductAgg
         public List<ProductSpecification> Specifications { get; private set; }
 
         public Product(string title, string imageName, string description, long categoryId,
-           long subCategoryId, long? secondarySubCategoryId, IProductDomainService domainService,
+           long? subCategoryId, long? secondarySubCategoryId, IProductDomainService domainService,
            string slug, SeoData seoData, string brandName, ProductStatus status)
         {
             NullOrEmptyDomainDataException.CheckString(imageName, nameof(imageName));
@@ -51,9 +52,15 @@ namespace Shop.Domain.ProductAgg
             Status = status;
         }
 
-        public void AddVariant(ProductVariant variant)
+		public void MarkAsSpecial() => IsSpecial = true;
+		public void UnmarkAsSpecial() => IsSpecial = false;
+
+		public void AddVariant(ProductVariant variant)
         {
             ProductVariants.Add(variant);
+
+            if(Status == ProductStatus.Draft)
+                Status = ProductStatus.Published;
         }
 
         public void EditVariant(long variantId, string? color, string? size, int? stock,
@@ -76,7 +83,7 @@ namespace Shop.Domain.ProductAgg
 
 
         public void Edit(string title, string description, long categoryId, string brandName,
-            long subCategoryId, long secondarySubCategoryId, string slug, IProductDomainService domainService
+            long? subCategoryId, long? secondarySubCategoryId, string slug, IProductDomainService domainService
             , SeoData seoData, ProductStatus status)
         {
             Guard(title, slug, description, brandName, domainService);
@@ -119,7 +126,7 @@ namespace Shop.Domain.ProductAgg
             Specifications = specifications;
         }
 
-        private void Guard(string title, string slug, string description, string brandName,
+		private void Guard(string title, string slug, string description, string brandName,
             IProductDomainService domainService)
         {
             NullOrEmptyDomainDataException.CheckString(title, nameof(title));

@@ -14,9 +14,11 @@ public class ProductShopDto : BaseDto
     public string Title { get; set; }
     public string Slug { get; set; }
     public string BrandName { get; set; }
-    public ProductStatus Status { get; set; }
-    public string ImageName { get; set; }
-    public List<ProductVariantDto> ProductVariants { get; set; }
+	public string ImageName { get; set; }
+	public List<ProductImageDto> Images { get; set; }
+	public ProductStatus Status { get; set; }
+	public List<ProductVariantShopDto> ProductVariantsShop { get; set; }
+
 }
 public class ProductShopFilterParam : BaseFilterParam
 {
@@ -24,7 +26,8 @@ public class ProductShopFilterParam : BaseFilterParam
     public string? Search { get; set; } = "";
     public bool OnlyAvailableProducts { get; set; } = false;
     public bool JustHasDiscount { get; set; } = false;
-    public ProductSearchOrderBy SearchOrderBy { get; set; } = ProductSearchOrderBy.Cheapest;
+	public bool SpecialProducts { get; set; } = false;
+	public ProductSearchOrderBy SearchOrderBy { get; set; } = ProductSearchOrderBy.Cheapest;
 }
 
 public enum ProductSearchOrderBy

@@ -33,7 +33,7 @@ public class UserToken : BaseEntity
         NullOrEmptyDomainDataException.CheckString(hashJwtToken, nameof(HashJwtToken));
         NullOrEmptyDomainDataException.CheckString(hashRefreshToken, nameof(HashRefreshToken));
 
-        if (tokenExpireDate < DateTime.Now)
+        if (tokenExpireDate < DateTime.UtcNow)
             throw new InvalidDomainDataException("Invalid Token ExpireDate");
 
         if (refreshTokenExpireDate < tokenExpireDate)

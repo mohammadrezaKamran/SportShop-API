@@ -16,7 +16,7 @@ namespace Shop.Domain.UserAgg
             IsFinally = isFinally;
             Type = type;
             if(isFinally)
-                FinallyDate=DateTime.Now;
+                FinallyDate=DateTime.UtcNow;
         }
 
         public long UserId { get; internal set; }
@@ -29,14 +29,14 @@ namespace Shop.Domain.UserAgg
         public void Finally(string refCode)
         {
             IsFinally = true;
-            FinallyDate = DateTime.Now;
+            FinallyDate = DateTime.UtcNow;
             Description += $" کد پیگیری : {refCode}";
         }
 
         public void Finally()
         {
             IsFinally = true;
-            FinallyDate = DateTime.Now;
+            FinallyDate = DateTime.UtcNow;
         }
     }
 }

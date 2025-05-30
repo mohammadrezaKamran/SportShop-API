@@ -60,8 +60,14 @@ namespace Shop.Query.Products.GetProductForShop
                 query = query.Where(p => p.ProductVariants.Any(v => v.StockQuantity > 0));
             }
 
-            //  فقط محصولات دارای تخفیف
-            if (@params.JustHasDiscount)
+			// فقط محصولات ویژه
+			if (@params.SpecialProducts)
+			{
+				query = query.Where(p => p.IsSpecial==true);
+			}
+
+			//  فقط محصولات دارای تخفیف
+			if (@params.JustHasDiscount)
             {
                 query = query.Where(p => p.ProductVariants.Any(v => v.DiscountPercentage > 0));
             }
@@ -92,8 +98,17 @@ namespace Shop.Query.Products.GetProductForShop
                     Slug = p.Slug,
                     Status = p.Status,
 
-                    ProductVariants = p.ProductVariants.Select(variant => new ProductVariantDto
-                    {
+					Images = p.Images.Select(s => new ProductImageDto()
+					{
+						Id = s.Id,
+						CreationDate = s.CreationDate,
+						ImageName = s.ImageName,
+						ProductId = s.ProductId,
+						Sequence = s.Sequence
+					}).ToList(),
+
+					ProductVariantsShop = p.ProductVariants.Select(variant => new ProductVariantShopDto
+					{
                         Id = variant.Id,
                         ProductId = variant.ProductId,
                         SKU = variant.SKU,

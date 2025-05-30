@@ -31,12 +31,12 @@ namespace Shop.Application.Orders.Checkout
             RuleFor(f => f.PostalAddress)
               .NotNull()
               .NotEmpty()
-              .WithMessage(ValidationMessages.required("استان"));
+              .WithMessage(ValidationMessages.required("آدرس پستی"));
 
             RuleFor(f => f.PostalCode)
              .NotNull()
              .NotEmpty()
-             .WithMessage(ValidationMessages.required("استان"));
+             .WithMessage(ValidationMessages.required("کد پستی"));
 
             RuleFor(f => f.PhoneNumber)
               .NotNull()

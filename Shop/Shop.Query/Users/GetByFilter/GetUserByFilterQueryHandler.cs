@@ -17,7 +17,7 @@ public class GetUserByFilterQueryHandler : IQueryHandler<GetUserByFilterQuery, U
     public async Task<UserFilterResult> Handle(GetUserByFilterQuery request, CancellationToken cancellationToken)
     {
         var @params = request.FilterParams;
-        var result = _context.Users.OrderByDescending(d => d.Id).AsQueryable();
+        var result = _context.Users.OrderByDescending(d => d.CreationDate).AsQueryable();
 
         if (!string.IsNullOrWhiteSpace(@params.Email))
             result = result.Where(r => r.Email.Contains(@params.Email));
@@ -27,6 +27,12 @@ public class GetUserByFilterQueryHandler : IQueryHandler<GetUserByFilterQuery, U
 
         if (@params.Id != null)
             result = result.Where(r => r.Id == @params.Id);
+
+        if (!string.IsNullOrWhiteSpace(@params.Name))
+            result = result.Where(r => r.Name.Contains(@params.Name));
+
+        if (!string.IsNullOrWhiteSpace(@params.Family))
+            result = result.Where(r => r.Family.Contains(@params.Family));
 
         var skip = (@params.PageId - 1) * @params.Take;
         var model = new UserFilterResult()

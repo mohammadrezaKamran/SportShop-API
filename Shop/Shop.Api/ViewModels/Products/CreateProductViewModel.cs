@@ -10,8 +10,8 @@ public class CreateProductViewModel
     public IFormFile ImageFile { get; set; }
     public string Description { get; set; }
     public long CategoryId { get; set; }
-    public long SubCategoryId { get; set; }
-    public long SecondarySubCategoryId { get; set; }
+    public long? SubCategoryId { get; set; }
+    public long? SecondarySubCategoryId { get; set; }
     public string Slug { get; set; }
     public string BrandName {  get; set; }
     public SeoDataViewModel SeoData { get; set; }
@@ -30,8 +30,8 @@ public class EditProductViewModel
     public IFormFile? ImageFile { get; set; }
     public string Description { get; set; }
     public long CategoryId { get; set; }
-    public long SubCategoryId { get; set; }
-    public long SecondarySubCategoryId { get; set; }
+    public long? SubCategoryId { get; set; }
+    public long? SecondarySubCategoryId { get; set; }
     public string Slug { get; set; }
     public string BrandName {  get; set; }
     public ProductStatus Status { get; set; }
