@@ -23,7 +23,12 @@ public class GetBannerListQueryHandler : IQueryHandler<GetBannerListQuery, List<
                 CreationDate = banner.CreationDate,
                 ImageName = banner.ImageName,
                 Link = banner.Link,
-                Position = banner.Position
-            }).ToListAsync(cancellationToken);
+                Position = banner.Position,
+				Title = banner.Title,
+				Description = banner.Description,
+				AltText = banner.AltText,
+				IsActive = banner.IsActive,
+				Order = banner.Order,
+			}).ToListAsync(cancellationToken);
     }
 }

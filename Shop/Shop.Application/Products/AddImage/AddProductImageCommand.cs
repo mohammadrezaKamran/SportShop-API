@@ -14,5 +14,6 @@ namespace Shop.Application.Products.AddImage
         public IFormFile ImageFile { get;  set; }
         public long ProductId { get;  set; }
         public int Sequence { get;  set; }
+		public string AltText { get;  set; }
     }
 }

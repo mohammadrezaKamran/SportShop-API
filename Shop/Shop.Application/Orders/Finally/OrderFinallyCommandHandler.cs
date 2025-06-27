@@ -34,7 +34,10 @@ public class OrderFinallyCommandHandler : IBaseCommandHandler<OrderFinallyComman
 				return OperationResult.Error(ex.Message);
 			}
 		}
-        order.Finally(request.TextForInvoice);
+
+		string TextForInvoice = $"SportShop-{DateTime.UtcNow:yyyyMMdd}";
+
+		order.Finally(TextForInvoice);
         await _repository.Save();
         return OperationResult.Success();
     }

@@ -21,4 +21,12 @@ public class ProductRepository : BaseRepository<Product>, IProductRepository
         return product?.ProductVariants.FirstOrDefault(v => v.Id == variantId);
     }
 
+	public async Task<bool> IsSequenceDuplicateAsync(long productId, int sequence)
+	{
+        return await Context.Products
+            .Where(p => p.Id == productId)
+            .SelectMany(p => p.Images)
+            .AnyAsync(img => img.Sequence == sequence);
+
+	}
 }

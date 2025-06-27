@@ -2,6 +2,7 @@
 using Common.Application.SecurityUtil;
 using MediatR;
 using Microsoft.Extensions.Caching.Distributed;
+using Microsoft.Extensions.Logging;
 using Shop.Application.OTP;
 using Shop.Application.Users.AddToken;
 using Shop.Application.Users.ChangePassword;
@@ -12,6 +13,7 @@ using Shop.Application.Users.Register;
 using Shop.Application.Users.RemoveToken;
 using Shop.Application.Users.WishList.AddToWishList;
 using Shop.Application.Users.WishList.RemoveWishList;
+using Shop.Presentation.Facade.Categories;
 using Shop.Query.Products.DTOs;
 using Shop.Query.Users.DTOs;
 using Shop.Query.Users.GetByFilter;
@@ -27,101 +29,225 @@ namespace Shop.Presentation.Facade.Users;
 internal class UserFacade : IUserFacade
 {
     private readonly IMediator _mediator;
-    public UserFacade(IMediator mediator)
-    {
-        _mediator = mediator;
-    }
+	private readonly ILogger<UserFacade> _logger;
+
+	public UserFacade(IMediator mediator, ILogger<UserFacade> logger)
+	{
+		_mediator = mediator;
+		_logger = logger;
+	}
 
 
-    public async Task<OperationResult> CreateUser(CreateUserCommand command)
-    {
-        return await _mediator.Send(command);
-    }
+	public async Task<OperationResult> CreateUser(CreateUserCommand command)
+	{
+		try
+		{
+			return await _mediator.Send(command);
+		}
+		catch (Exception ex)
+		{
+			_logger.LogError(ex, "خطا در ایجاد کاربر");
+			return OperationResult.Error("خطا در ایجاد کاربر");
+		}
+	}
 
-    public async Task<OperationResult> AddToken(AddUserTokenCommand command)
-    {
-        return await _mediator.Send(command);
-    }
+	public async Task<OperationResult> AddToken(AddUserTokenCommand command)
+	{
+		try
+		{
+			return await _mediator.Send(command);
+		}
+		catch (Exception ex)
+		{
+			_logger.LogError(ex, "خطا در افزودن توکن");
+			return OperationResult.Error();
+		}
+	}
 
-    public async Task<OperationResult> RemoveToken(RemoveUserTokenCommand command)
-    {
-        var result = await _mediator.Send(command);
+	public async Task<OperationResult> RemoveToken(RemoveUserTokenCommand command)
+	{
+		try
+		{
+			var result = await _mediator.Send(command);
+			return result.Status == OperationResultStatus.Success
+				? OperationResult.Success()
+				: OperationResult.Error();
+		}
+		catch (Exception ex)
+		{
+			_logger.LogError(ex, "خطا در حذف توکن");
+			return OperationResult.Error();
+		}
+	}
 
-        if (result.Status != OperationResultStatus.Success)
-            return OperationResult.Error();
-
-        return OperationResult.Success();
-    }
-
-    public async Task<OperationResult> ChangePassword(ChangeUserPasswordCommand command)
-    {
-        return await _mediator.Send(command);
-    }
-
-    public async Task<OperationResult> EditUser(EditUserCommand command)
-    {
-        return await _mediator.Send(command);
-
-    }
-
-    public async Task<UserDto?> GetUserById(long userId)
-    {
-        
-            return await _mediator.Send(new GetUserByIdQuery(userId));
-       
-    }
-
-    public async Task<UserTokenDto?> GetUserTokenByRefreshToken(string refreshToken)
-    {
-        var hashRefreshToken = Sha256Hasher.Hash(refreshToken);
-        return await _mediator.Send(new GetUserTokenByRefreshTokenQuery(hashRefreshToken));
-    }
-
-    public async Task<UserTokenDto?> GetUserTokenByJwtToken(string jwtToken)
-    {
-        var hashJwtToken = Sha256Hasher.Hash(jwtToken);
-      
-            return await _mediator.Send(new GetUserTokenByJwtTokenQuery(hashJwtToken));
-     
-    }
-
-    public async Task<UserFilterResult> GetUserByFilter(UserFilterParams filterParams)
-    {
-        return await _mediator.Send(new GetUserByFilterQuery(filterParams));
-    }
-
-    public async Task<UserDto?> GetUserByPhoneNumber(string phoneNumber)
-    {
-        return await _mediator.Send(new GetUserByPhoneNumberQuery(phoneNumber));
-    }
-
-    public async Task<OperationResult> RegisterUser(RegisterUserCommand command)
-    {
-        return await _mediator.Send(command);
-    }
-
-    public async Task<OperationResult> AddToWishList(AddToWishListCommand command)
-    {
-        return await _mediator.Send(command);
-    }
-
-    public async Task<OperationResult> RemoveWishList(RemoveWishListCommand command)
-    {
-        return await _mediator.Send(command);
-    }
-
-    public async Task<List<WishListDto>> GetWishList(long userId)
-    {
-        return await _mediator.Send(new GetWishListQuery(userId));
-    }
-
-    public async Task<OperationResult> SendOTP(SendOtpCommand command)
-    {
-        return await _mediator.Send(command);
-    }
+	public async Task<OperationResult> ChangePassword(ChangeUserPasswordCommand command)
+	{
+		try
+		{
+			return await _mediator.Send(command);
+		}
+		catch (Exception ex)
+		{
+			_logger.LogError(ex, "خطا در تغییر رمز عبور");
+			return OperationResult.Error();
+		}
+	}
 
 	public async Task<OperationResult> ChangePasswordByAdmin(ChangeUserPasswordByAdminCommand command)
 	{
-		return await _mediator.Send(command);
+		try
+		{
+			return await _mediator.Send(command);
+		}
+		catch (Exception ex)
+		{
+			_logger.LogError(ex, "خطا در تغییر رمز عبور توسط ادمین");
+			return OperationResult.Error();
+		}
+	}
+
+	public async Task<OperationResult> EditUser(EditUserCommand command)
+	{
+		try
+		{
+			return await _mediator.Send(command);
+		}
+		catch (Exception ex)
+		{
+			_logger.LogError(ex, "خطا در ویرایش کاربر");
+			return OperationResult.Error();
+		}
+	}
+
+	public async Task<UserDto?> GetUserById(long userId)
+	{
+		try
+		{
+			return await _mediator.Send(new GetUserByIdQuery(userId));
+		}
+		catch (Exception ex)
+		{
+			_logger.LogError(ex, "خطا در دریافت کاربر با آیدی {UserId}", userId);
+			return null;
+		}
+	}
+
+	public async Task<UserDto?> GetUserByPhoneNumber(string phoneNumber)
+	{
+		try
+		{
+			return await _mediator.Send(new GetUserByPhoneNumberQuery(phoneNumber));
+		}
+		catch (Exception ex)
+		{
+			_logger.LogError(ex, "خطا در دریافت کاربر با شماره {Phone}", phoneNumber);
+			return null;
+		}
+	}
+
+	public async Task<UserTokenDto?> GetUserTokenByRefreshToken(string refreshToken)
+	{
+		try
+		{
+			var hash = Sha256Hasher.Hash(refreshToken);
+			return await _mediator.Send(new GetUserTokenByRefreshTokenQuery(hash));
+		}
+		catch (Exception ex)
+		{
+			_logger.LogError(ex, "خطا در دریافت Refresh Token");
+			return null;
+		}
+	}
+
+	public async Task<UserTokenDto?> GetUserTokenByJwtToken(string jwtToken)
+	{
+		try
+		{
+			var hash = Sha256Hasher.Hash(jwtToken);
+			return await _mediator.Send(new GetUserTokenByJwtTokenQuery(hash));
+		}
+		catch (Exception ex)
+		{
+			_logger.LogError(ex, "خطا در دریافت JWT Token");
+			return null;
+		}
+	}
+
+	public async Task<UserFilterResult> GetUserByFilter(UserFilterParams filterParams)
+	{
+		try
+		{
+			return await _mediator.Send(new GetUserByFilterQuery(filterParams));
+		}
+		catch (Exception ex)
+		{
+			_logger.LogError(ex, "خطا در فیلتر کاربران");
+			return new UserFilterResult();
+		}
+	}
+
+	public async Task<OperationResult> RegisterUser(RegisterUserCommand command)
+	{
+		try
+		{
+			return await _mediator.Send(command);
+		}
+		catch (Exception ex)
+		{
+			_logger.LogError(ex, "خطا در ثبت‌نام کاربر");
+			return OperationResult.Error();
+		}
+	}
+
+	public async Task<OperationResult> AddToWishList(AddToWishListCommand command)
+	{
+		try
+		{
+			return await _mediator.Send(command);
+		}
+		catch (Exception ex)
+		{
+			_logger.LogError(ex, "خطا در افزودن به علاقه‌مندی‌ها");
+			return OperationResult.Error();
+		}
+	}
+
+	public async Task<OperationResult> RemoveWishList(RemoveWishListCommand command)
+	{
+		try
+		{
+			return await _mediator.Send(command);
+		}
+		catch (Exception ex)
+		{
+			_logger.LogError(ex, "خطا در حذف از علاقه‌مندی‌ها");
+			return OperationResult.Error();
+		}
+	}
+
+	public async Task<List<WishListDto>> GetWishList(long userId)
+	{
+		try
+		{
+			return await _mediator.Send(new GetWishListQuery(userId));
+		}
+		catch (Exception ex)
+		{
+			_logger.LogError(ex, "خطا در دریافت علاقه‌مندی‌های کاربر {UserId}", userId);
+			return new List<WishListDto>();
+		}
+	}
+
+	public async Task<OperationResult> SendOTP(SendOtpCommand command)
+	{
+		try
+		{
+			return await _mediator.Send(command);
+		}
+		catch (Exception ex)
+		{
+			_logger.LogError(ex, "خطا در ارسال OTP");
+			return OperationResult.Error("خطا در ارسال کد تأیید");
+		}
 	}
 }

@@ -27,7 +27,11 @@ public class GetSliderByIdQueryHandler : IQueryHandler<GetSliderByIdQuery, Slide
             CreationDate = slider.CreationDate,
             ImageName = slider.ImageName,
             Link = slider.Link,
-            Title = slider.Title
+            Title = slider.Title,
+            Description = slider.Description,
+            Order = slider.Order,
+            AltText = slider.AltText,
+            IsActive = slider.IsActive,
         };
     }
 }

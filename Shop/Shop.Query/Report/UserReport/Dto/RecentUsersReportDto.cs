@@ -17,6 +17,8 @@ namespace Shop.Query.Report.UserReport.Dto
 
 public class LatestCommentDto:BaseDto
 {
-    public long ProductId { get; set; }
     public string Comment { get; set; }
+    public string UserName {  get; set; }
+    public string ImageName {  get; set; }
+    public string ProductTitle {  get; set; }
 }

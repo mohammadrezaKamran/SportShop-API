@@ -14,7 +14,8 @@ namespace Shop.Application.Products.Create
     {
         public string Title { get; set;}
         public IFormFile ImageFile { get; set;}
-        public string Description { get; set;}
+		public string AltText { get;  set; }
+		public string Description { get; set;}
         public long CategoryId { get; set;}
         public long? SubCategoryId { get; set;}
         public long? SecondarySubCategoryId { get; set;}

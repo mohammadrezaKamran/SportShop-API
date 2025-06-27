@@ -4,6 +4,7 @@ using Shop.Application.Comments.Create;
 using Shop.Application.Comments.Delete;
 using Shop.Application.Comments.Edit;
 using Shop.Query.Comments.DTOs;
+using Shop.Query.Report.Order.Dtos;
 using Shop.Query.Report.ProductReport.Dto;
 using Shop.Query.Report.UserReport.Dto;
 using System;
@@ -17,18 +18,15 @@ namespace Shop.Presentation.Facade.Report
     public interface IReportFacade
     {
         Task<IncomeReportDto?> GetTotalIncomeReport();
-        Task<List<MonthlyIncomeReportDto?>> GetMonthlyIncomeReport(int MonthCount);
-        Task<decimal> GetTodaysSales();
-
-        Task<long> GetNewOrder();
 
         Task<List<ProductSalesDto>> GetBestSellersProduct();
-        Task<long> GetCountOFProduct();
         Task<List<OutOfStockProductDto>> GetOutOfStockProduct();
 
         Task<RecentUsersReportDto?> GetRecentUserReport(int Days);
         Task<List<LatestCommentDto>> GetLatestComment();
 
+        Task<List<RecentOrderDto>> GetRecentOrder();
+        Task<NumberOfThingDto> GetNumberOfThings();
     }
 }
  

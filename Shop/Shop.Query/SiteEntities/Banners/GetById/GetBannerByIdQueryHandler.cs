@@ -26,7 +26,12 @@ public class GetBannerByIdQueryHandler : IQueryHandler<GetBannerByIdQuery, Banne
             CreationDate = banner.CreationDate,
             ImageName = banner.ImageName,
             Link = banner.Link,
-            Position = banner.Position
+            Position = banner.Position,
+            Title = banner.Title,
+            Description = banner.Description,
+            AltText = banner.AltText,
+            IsActive = banner.IsActive,
+            Order = banner.Order,
         };
     }
 }

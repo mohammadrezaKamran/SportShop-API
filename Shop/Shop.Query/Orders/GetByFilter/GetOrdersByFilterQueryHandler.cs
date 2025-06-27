@@ -31,11 +31,11 @@ internal class GetOrdersByFilterQueryHandler : IQueryHandler<GetOrdersByFilterQu
         if (@params.EndDate != null)
             result = result.Where(r => r.CreationDate.Date <= @params.EndDate.Value.Date);
 
-		if (@params.OrderNumber != null)
-			result = result.Where(r => r.OrderNumber == @params.OrderNumber.Trim());
+		if (!string.IsNullOrWhiteSpace(@params.OrderNumber))
+			result = result.Where(r => r.OrderNumber.Contains(@params.OrderNumber.Trim()));
 
-		if (@params.TrackingNumber != null)
-			result = result.Where(r => r.TrackingNumber == @params.TrackingNumber.Trim());
+		if (!string.IsNullOrWhiteSpace(@params.TrackingNumber))
+			result = result.Where(r => r.TrackingNumber.Contains(@params.TrackingNumber.Trim()));
 
 		var skip = (@params.PageId - 1) * @params.Take;
         var model = new OrderFilterResult()

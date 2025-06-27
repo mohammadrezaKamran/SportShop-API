@@ -15,19 +15,10 @@ namespace Shop.Query.Report.FinancialReport.DTOs
     }
 }
 
-public class MonthlyIncomeReportDto
-{
-    public string Month { get; set; }
-    public decimal TotalIncome { get; set; }
-}
-
 public class IncomeReportDto
 {
     public decimal TotalIncome { get; set; }
-    public int TotalOrders { get; set; }
-}
-public class SalesReportDto
-{
-    public decimal TotalSales { get; set; }
-    public int TotalOrders { get; set; }
+    public decimal SixMonthlyIncome { get; set; }
+    public decimal MonthlyIncome { get; set; }
+    public decimal DailyIncome { get; set; }
 }

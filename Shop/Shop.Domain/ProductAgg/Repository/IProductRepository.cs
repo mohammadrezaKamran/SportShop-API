@@ -10,5 +10,6 @@ namespace Shop.Domain.ProductAgg.Repository
     public interface IProductRepository:IBaseRepository<Product>
     {
         Task<ProductVariant?> GetVariantById(long variantId);
-    }
+		Task<bool> IsSequenceDuplicateAsync(long productId, int sequence);
+	}
 }

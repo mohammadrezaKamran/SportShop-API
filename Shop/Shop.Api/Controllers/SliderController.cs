@@ -13,7 +13,7 @@ using Shop.Query.SiteEntities.DTOs;
 namespace Shop.Api.Controllers;
 
 
-//[PermissionChecker(Permission.CRUD_Slider)]
+[PermissionChecker(Permission.CRUD_Slider)]
 public class SliderController : ApiController
 {
     private readonly ISliderFacade _facade;

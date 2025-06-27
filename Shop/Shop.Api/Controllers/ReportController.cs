@@ -7,12 +7,14 @@ using Shop.Presentation.Facade.Comments;
 using Shop.Presentation.Facade.Report;
 using Shop.Presentation.Facade.Roles;
 using Shop.Query.Comments.DTOs;
+using Shop.Query.Report.Order.Dtos;
 using Shop.Query.Report.ProductReport.Dto;
 using Shop.Query.Report.UserReport.Dto;
 using Shop.Query.Roles.DTOs;
 
 namespace Shop.Api.Controllers;
 
+[PermissionChecker(Permission.PanelAdmin)]
 public class ReportController : ApiController
 {
     private readonly IReportFacade _reportFacade;
@@ -31,44 +33,10 @@ public class ReportController : ApiController
     }
 
     //[PermissionChecker(Permission.PanelAdmin)]
-    [HttpGet("{MonthlyIncome}")]
-    public async Task<ApiResult<List<MonthlyIncomeReportDto?>>> GetMonthlyIncomeReport(int MonthCount)
-    {
-        var result = await _reportFacade.GetMonthlyIncomeReport(MonthCount);
-        return QueryResult(result);
-    }
-
-    //[PermissionChecker(Permission.PanelAdmin)]
-    [HttpGet("TodaysSales")]
-    public async Task<ApiResult<decimal>> GetTodaysSales()
-    {
-        var result = await _reportFacade.GetTodaysSales();
-        return QueryResult(result);
-    }
-
-    //[PermissionChecker(Permission.PanelAdmin)]
-    [HttpGet("NewOrder")]
-    public async Task<ApiResult<long>> GetNewOrder()
-    {
-        var result = await _reportFacade.GetNewOrder();
-        return QueryResult(result);
-    }
-
-    
-
-    //[PermissionChecker(Permission.PanelAdmin)]
     [HttpGet("BestSellersProduct")]
     public async Task<ApiResult<List<ProductSalesDto>>> GetBestSellersProduct()
     {
         var result = await _reportFacade.GetBestSellersProduct();
-        return QueryResult(result);
-    }
-
-    //[PermissionChecker(Permission.PanelAdmin)]
-    [HttpGet("CountOfProduct")]
-    public async Task<ApiResult<long>> GetCountOFProduct()
-    {
-        var result = await _reportFacade.GetCountOFProduct();
         return QueryResult(result);
     }
 
@@ -96,4 +64,17 @@ public class ReportController : ApiController
         return QueryResult(result);
     }
 
+    [HttpGet("RecentOrder")]
+    public async Task<ApiResult<List<RecentOrderDto>>> GetRecentOrder()
+    {
+        var result = await _reportFacade.GetRecentOrder();
+        return QueryResult(result);
+    }
+
+    [HttpGet("NumberOfThings")]
+    public async Task<ApiResult<NumberOfThingDto>> GetNumberOfThings()
+    {
+        var result = await _reportFacade.GetNumberOfThings();
+        return QueryResult(result);
+    }
 }

@@ -39,7 +39,7 @@ public class CommentController : ApiController
             ProductId = productId,
             PageId = pageId,
             Take = take,
-            //CommentStatus = CommentStatus.Accepted
+           // CommentStatus = CommentStatus.Accepted
         });
         return QueryResult(result);
     }

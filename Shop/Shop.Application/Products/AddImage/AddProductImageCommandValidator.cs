@@ -12,8 +12,9 @@ namespace Shop.Application.Products.AddImage
                 .NotNull().WithMessage(ValidationMessages.required("عکس"))
                 .JustImageFile();
 
-            RuleFor(b => b.Sequence)
-                .GreaterThanOrEqualTo(0);
-        }
+			RuleFor(b => b.Sequence)
+		                          .GreaterThan(0)
+		                          .WithMessage("ترتیب تصویر باید بزرگ‌تر از صفر باشد.");
+		}
     }
 }

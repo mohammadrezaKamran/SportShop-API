@@ -22,5 +22,7 @@ namespace Shop.Presentation.Facade.Siteentities.SiteSettings
         Task<SiteSettingDto> GetSiteSettingById(long id);
         Task<SiteSettingDto> GetSiteSettingByKey(string key);
         Task<List<SiteSettingDto>> GetSiteSettings();
+		Task<List<SiteSettingDto>> GetSiteSettingsByGroup(SiteSettingGroup Group);
+		Task<SeoDataDto> GetSeoDataForPage(string pageKey);
     }
 }

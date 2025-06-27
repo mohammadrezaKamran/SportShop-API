@@ -53,12 +53,12 @@ namespace Shop.Domain.SiteEntities
 public enum SiteSettingGroup
 {
     General = 0,
-    Contact = 1,
+    ContactUs = 1,
     SEO = 2,
-    SocialMedia = 3,
-    Payment = 4,
-    Appearance = 5,
-    Support = 6,
+    AboutUs = 3,
+    Index = 4,
+    Layout = 5,
+    FAQ = 6,
     Notification = 7,
     Other = 99
 }

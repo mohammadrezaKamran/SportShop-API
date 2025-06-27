@@ -3,4 +3,4 @@ using MediatR;
 
 namespace Shop.Application.Orders.Finally;
 
-public record OrderFinallyCommand(long OrderId , string TextForInvoice) : IBaseCommand;
+public record OrderFinallyCommand(long OrderId) : IBaseCommand;

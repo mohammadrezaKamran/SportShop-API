@@ -28,15 +28,22 @@ namespace Shop.Api.Controllers
         }
 
 
+        [HttpGet("SeoData")]
+        public async Task<ApiResult<SeoDataDto>> GetSeoData([FromQuery] string pageKey)
+        {
+            var result = await _siteSettingFacade.GetSeoDataForPage(pageKey);
+            return QueryResult(result);
 
-        [HttpPost]
+        }
+		[PermissionChecker(Permission.PanelAdmin)]
+		[HttpPost]
         public async Task<ApiResult> CreateSiteSetting(CreateSiteSettingCommand command)
         {
             var result = await _siteSettingFacade.CreateSiteSetting(command);
             return CommandResult(result);
         }
-
-        [HttpPut]
+		[PermissionChecker(Permission.PanelAdmin)]
+		[HttpPut]
         public async Task<ApiResult> EditSiteSetting(EditSiteSettingCommand command)
         {
             var result = await _siteSettingFacade.EditSiteSetting(command);
@@ -50,15 +57,22 @@ namespace Shop.Api.Controllers
             return QueryResult(result);
         }
 
+		[HttpGet("ByGroup")]
+		public async Task<ApiResult<List<SiteSettingDto>>> GetSiteSettingsByGroup([FromQuery]SiteSettingGroup group)
+		{
+			var result = await _siteSettingFacade.GetSiteSettingsByGroup(group);
+			return QueryResult(result);
+		}
 
-        [HttpGet("{id}")]
+
+		[HttpGet("ById{id}")]
         public async Task<ApiResult<SiteSettingDto>> GetSiteSettingById(long id)
         {
             var result = await _siteSettingFacade.GetSiteSettingById(id);
             return QueryResult(result);
         }
 
-        [HttpGet("{key}")]
+        [HttpGet("ByKey{key}")]
         public async Task<ApiResult<SiteSettingDto>> GetSiteSettingByKey(string key)
         {
             var result = await _siteSettingFacade.GetSiteSettingByKey(key);

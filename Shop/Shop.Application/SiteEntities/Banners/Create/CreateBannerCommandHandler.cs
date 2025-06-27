@@ -1,5 +1,6 @@
 ﻿using Common.Application;
 using Common.Application.FileUtil.Interfaces;
+using Common.Domain.Exceptions;
 using Shop.Application._Utilities;
 using Shop.Domain.SiteEntities;
 using Shop.Domain.SiteEntities.Repositories;
@@ -18,9 +19,12 @@ public class CreateBannerCommandHandler : IBaseCommandHandler<CreateBannerComman
 
     public async Task<OperationResult> Handle(CreateBannerCommand request, CancellationToken cancellationToken)
     {
-        var imageName = await _fileService
+		if (await _repository.IsOrderDuplicateAsync(request.Position, request.Order))
+			throw new InvalidDomainDataException("اولویت انتخاب‌شده قبلاً استفاده شده است.");
+
+		var imageName = await _fileService
             .SaveFileAndGenerateName(request.ImageFile, Directories.BannerImages);
-        var banner = new Banner(request.Link, imageName, request.Position);
+        var banner = new Banner(request.Link, imageName, request.Position, request.Title , request.Description ,request.IsActive ,request.Order , request.AltText);
 
         _repository.Add(banner);
         await _repository.Save();

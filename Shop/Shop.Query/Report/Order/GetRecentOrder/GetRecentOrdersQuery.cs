@@ -1,6 +1,7 @@
 ﻿using Common.Query;
 using MediatR;
 using Shop.Query.Orders.DTOs;
+using Shop.Query.Report.Order.Dtos;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -9,7 +10,7 @@ using System.Threading.Tasks;
 
 namespace Shop.Query.Report.Order.GetNewOrder
 {
-    public class GetNewOrdersQuery:IRequest<long>
+    public class GetRecentOrdersQuery:IRequest<List<RecentOrderDto>>
     {
     }
 }

@@ -10,5 +10,6 @@ namespace Shop.Domain.SiteEntities.Repositories
     public interface IBannerRepository : IBaseRepository<Banner>
     {
         void Delete(Banner banner);
-    }
+		Task<bool> IsOrderDuplicateAsync(BannerPosition position, int order, long? excludeId = null);
+	}
 }

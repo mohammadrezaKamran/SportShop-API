@@ -28,7 +28,7 @@ namespace Shop.Application.Products.Edit
                 return OperationResult.NotFound();
 
             product.Edit(request.Title, request.Description, request.CategoryId,request.BrandName, request.SubCategoryId,
-                request.SecondarySubCategoryId, request.Slug, _domainService, request.SeoData,request.Status);
+                request.SecondarySubCategoryId, request.Slug, _domainService, request.SeoData,request.AltText,request.Status);
 
             var oldImage = product.ImageName;
 

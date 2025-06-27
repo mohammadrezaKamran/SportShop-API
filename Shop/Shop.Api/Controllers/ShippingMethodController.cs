@@ -2,8 +2,10 @@
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using Shop.Api.Infrastructure.Security;
 using Shop.Application.SiteEntities.ShippingMethods.Create;
 using Shop.Application.SiteEntities.ShippingMethods.Edit;
+using Shop.Domain.RoleAgg.Enums;
 using Shop.Presentation.Facade.Siteentities.ShippingMethods;
 using Shop.Query.SiteEntities.DTOs;
 
@@ -27,29 +29,30 @@ public class ShippingMethodController : ApiController
         var result = await _facade.GetList();
         return QueryResult(result);
     }
-    [HttpGet("{id}")]
+	[PermissionChecker(Permission.PanelAdmin)]
+	[HttpGet("{id}")]
     public async Task<ApiResult<ShippingMethodDto>> GetById(long id)
     {
         var result = await _facade.GetShippingMethodById(id);
         return QueryResult(result);
     }
 
-
-    [HttpPost]
+	[PermissionChecker(Permission.PanelAdmin)]
+	[HttpPost]
     public async Task<ApiResult> Create(CreateShippingMethodCommand command)
     {
         var result = await _facade.Create(command);
         return CommandResult(result);
     }
-
-    [HttpPut]
+	[PermissionChecker(Permission.PanelAdmin)]
+	[HttpPut]
     public async Task<ApiResult> Edit(EditShippingMethodCommand command)
     {
         var result = await _facade.Edit(command);
         return CommandResult(result);
     }
-
-    [HttpDelete("{id}")]
+	[PermissionChecker(Permission.PanelAdmin)]
+	[HttpDelete("{id}")]
     public async Task<ApiResult> Delete(long id)
     {
         var result = await _facade.Delete(id);

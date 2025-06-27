@@ -92,11 +92,14 @@ namespace Shop.Query.Products.GetProductForShop
                 .Select(p => new ProductShopDto
                 {
                     Id = p.Id,
+                    CreationDate = p.CreationDate,
                     Title = p.Title,
                     ImageName = p.ImageName,
                     BrandName = p.BrandName,
                     Slug = p.Slug,
                     Status = p.Status,
+                    IsSpecial = p.IsSpecial,
+                    AltText = p.AltText,
 
 					Images = p.Images.Select(s => new ProductImageDto()
 					{
@@ -104,13 +107,15 @@ namespace Shop.Query.Products.GetProductForShop
 						CreationDate = s.CreationDate,
 						ImageName = s.ImageName,
 						ProductId = s.ProductId,
-						Sequence = s.Sequence
+						Sequence = s.Sequence,
+                        AltText=s.AltText,
 					}).ToList(),
 
 					ProductVariantsShop = p.ProductVariants.Select(variant => new ProductVariantShopDto
 					{
                         Id = variant.Id,
-                        ProductId = variant.ProductId,
+						CreationDate = variant.CreationDate,
+						ProductId = variant.ProductId,
                         SKU = variant.SKU,
                         Color = variant.Color,
                         Size = variant.Size,

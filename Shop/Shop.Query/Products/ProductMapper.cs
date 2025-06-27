@@ -19,6 +19,7 @@ public static class ProductMapper
             CreationDate = product.CreationDate,
             Description = product.Description,
             ImageName = product.ImageName,
+            AltText = product.AltText,
             Slug = product.Slug,
             Title = product.Title,
             BrandName = product.BrandName,
@@ -53,7 +54,9 @@ public static class ProductMapper
                 CreationDate = s.CreationDate,
                 ImageName = s.ImageName,
                 ProductId = s.ProductId,
-                Sequence = s.Sequence
+                Sequence = s.Sequence,
+                AltText = s.AltText,
+                
             }).ToList(),
             Category = new()
             {
@@ -78,7 +81,10 @@ public static class ProductMapper
             CreationDate = product.CreationDate,
             ImageName = product.ImageName,
             Slug = product.Slug,
-            Title = product.Title
+            Title = product.Title,
+            IsSpecial = product.IsSpecial,
+            Status= product.Status,
+            AltText= product.AltText,
         };
     }
     public static async Task SetCategories(this ProductDto product, ShopContext context)

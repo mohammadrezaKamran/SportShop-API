@@ -8,7 +8,8 @@ public class CreateProductViewModel
 {
     public string Title { get; set; }
     public IFormFile ImageFile { get; set; }
-    public string Description { get; set; }
+	public string AltText { get; set; }
+	public string Description { get; set; }
     public long CategoryId { get; set; }
     public long? SubCategoryId { get; set; }
     public long? SecondarySubCategoryId { get; set; }
@@ -28,7 +29,8 @@ public class EditProductViewModel
     public long ProductId { get; set; }
     public string Title { get; set; }
     public IFormFile? ImageFile { get; set; }
-    public string Description { get; set; }
+	public string AltText { get; set; }
+	public string Description { get; set; }
     public long CategoryId { get; set; }
     public long? SubCategoryId { get; set; }
     public long? SecondarySubCategoryId { get; set; }

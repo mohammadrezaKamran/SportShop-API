@@ -14,6 +14,7 @@ using Shop.Domain.OrderAgg;
 using Shop.Domain.RoleAgg.Enums;
 using Shop.Presentation.Facade.Orders;
 using Shop.Query.Orders.DTOs;
+using Shop.Query.Report.UserReport.GetRecentUsers;
 
 namespace Shop.Api.Controllers;
 
@@ -36,7 +37,7 @@ public class OrderController : ApiController
     }
 
     [HttpGet("current/filter")]
-    public async Task<ApiResult<OrderFilterResult>> GetUserOrdersByFilter(int pageId = 1, int take = 10, OrderStatus status = OrderStatus.Finally)
+    public async Task<ApiResult<OrderFilterResult>> GetUserOrdersByFilter(int pageId = 1, int take = 10, OrderStatus? status=null)
     {
         var result = await _orderFacade.GetOrdersByFilter(new OrderFilterParams()
         {
@@ -57,7 +58,9 @@ public class OrderController : ApiController
         return QueryResult(result);
     }
 
-    [HttpGet("{orderId}")]
+
+	[PermissionChecker(Permission.Order_Management)]
+	[HttpGet("{orderId}")]
     public async Task<ApiResult<OrderDto?>> GetOrderById(long orderId)
     {
         var result = await _orderFacade.GetOrderById(orderId);
@@ -71,6 +74,7 @@ public class OrderController : ApiController
         return CommandResult(result);
     }
 
+	[PermissionChecker(Permission.Order_Management)]
 	[HttpPost("TrackingNumber")]
 	public async Task<ApiResult> SetTrackingNumber(SetTrackingNumberCommand command)
 	{
@@ -86,14 +90,16 @@ public class OrderController : ApiController
         return CommandResult(result);
     }
 
-    [HttpPost("ChangeStatus")]
+	[PermissionChecker(Permission.Order_Management)]
+	[HttpPost("ChangeStatus")]
     public async Task<ApiResult> ChangeOrderStatus(ChangeOrderStatusCommand command)
     {
         var result = await _orderFacade.ChangeOrderStatus(command);
         return CommandResult(result);
     }
 
-    [HttpPut("SendOrder/{orderId}")]
+	[PermissionChecker(Permission.Order_Management)]
+	[HttpPut("SendOrder/{orderId}")]
     public async Task<ApiResult> SendOrder(long orderId)
     {
         var result = await _orderFacade.SendOrder(orderId);
@@ -119,4 +125,5 @@ public class OrderController : ApiController
         var result = await _orderFacade.RemoveOrderItem(new RemoveOrderItemCommand(User.GetUserId(), itemId));
         return CommandResult(result);
     }
+
 }

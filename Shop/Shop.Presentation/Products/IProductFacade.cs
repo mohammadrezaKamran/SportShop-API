@@ -27,6 +27,8 @@ public interface IProductFacade
     Task<ProductDto?> GetProductById(long productId);
     Task<ProductVariantDto?> GetProductVariantById(long productVariantId);
     Task<ProductDto?> GetProductBySlug(string slug);
-    Task<ProductFilterResult> GetProductsByFilter(ProductFilterParams filterParams);
+	Task<FilterDetailsDto> GetFilterDetails();
+	Task<ProductFilterResult> GetProductsByFilter(ProductFilterParams filterParams);
     Task<ProductShopResult> GetProductForShop(ProductShopFilterParam filterParams);
+    Task<ProductCategoryResult> GetProductsForCategory(ProductCategoryFilterParam filterParams);
 }

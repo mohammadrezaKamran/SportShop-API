@@ -25,14 +25,18 @@ public class ProductConfiguration:IEntityTypeConfiguration<Product>
 
         builder.Property(b => b.Slug)
             .IsRequired()
-            .IsUnicode(false)
+            .IsUnicode(true)
             .HasMaxLength(500);
 
         builder.Property(p => p.BrandName)
                .IsRequired()
                .HasMaxLength(100);
 
-        builder.Property(p => p.Status)
+		builder.Property(p => p.AltText)
+			 .IsRequired()
+			 .HasMaxLength(255);
+
+		builder.Property(p => p.Status)
               .IsRequired();
 
         builder.OwnsOne(b => b.SeoData, config =>
@@ -67,8 +71,10 @@ public class ProductConfiguration:IEntityTypeConfiguration<Product>
                 .IsRequired()
                 .HasMaxLength(100);
 
-          
-        });
+			option.Property(p => p.AltText)
+		   .IsRequired()
+		   .HasMaxLength(255);
+		});
 
 
         builder.OwnsMany(b => b.Specifications, option =>

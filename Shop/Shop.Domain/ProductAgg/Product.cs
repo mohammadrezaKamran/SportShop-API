@@ -20,7 +20,8 @@ namespace Shop.Domain.ProductAgg
 
         public string Title { get; private set; }
         public string ImageName { get; private set; }
-        public string Description { get; private set; }
+		public string AltText { get; private set; }
+		public string Description { get; private set; }
         public long CategoryId { get; private set; }
         public long? SubCategoryId { get; private set; }
         public long? SecondarySubCategoryId { get; private set; }
@@ -35,7 +36,7 @@ namespace Shop.Domain.ProductAgg
 
         public Product(string title, string imageName, string description, long categoryId,
            long? subCategoryId, long? secondarySubCategoryId, IProductDomainService domainService,
-           string slug, SeoData seoData, string brandName, ProductStatus status)
+           string slug, SeoData seoData, string brandName,string altText, ProductStatus status)
         {
             NullOrEmptyDomainDataException.CheckString(imageName, nameof(imageName));
             Guard(title, slug, description, brandName, domainService);
@@ -49,6 +50,7 @@ namespace Shop.Domain.ProductAgg
             Slug = slug.ToSlug();
             SeoData = seoData;
             BrandName = brandName;
+            AltText = altText;
             Status = status;
         }
 
@@ -84,7 +86,7 @@ namespace Shop.Domain.ProductAgg
 
         public void Edit(string title, string description, long categoryId, string brandName,
             long? subCategoryId, long? secondarySubCategoryId, string slug, IProductDomainService domainService
-            , SeoData seoData, ProductStatus status)
+            , SeoData seoData,string altText, ProductStatus status)
         {
             Guard(title, slug, description, brandName, domainService);
             Title = title;
@@ -95,7 +97,8 @@ namespace Shop.Domain.ProductAgg
             Slug = slug.ToSlug();
             SeoData = seoData;
             BrandName = brandName;
-            Status = status;
+			AltText = altText;
+			Status = status;
         }
 
         public void SetProductImage(string imageName)

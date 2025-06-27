@@ -1,5 +1,6 @@
 ﻿using Common.Application;
 using Common.Application.FileUtil.Interfaces;
+using Common.Domain.Exceptions;
 using Microsoft.AspNetCore.Http;
 using Shop.Application._Utilities;
 using Shop.Domain.SiteEntities.Repositories;
@@ -21,13 +22,24 @@ internal class EditSliderCommandHandler : IBaseCommandHandler<EditSliderCommand>
         var slider = await _repository.GetTracking(request.Id);
         if (slider == null)
             return OperationResult.NotFound();
-        var imageName = slider.ImageName;
+
+		bool isDuplicate = await _repository.IsOrderDuplicateAsync(
+
+							order: request.Order,
+							excludeId: request.Id
+						);
+
+		if (isDuplicate)
+			return OperationResult.Error("اولویت وارد شده تکراری است");
+
+
+		var imageName = slider.ImageName;
         var oldImage = slider.ImageName;
         if (request.ImageFile != null)
             imageName = await _fileService
                 .SaveFileAndGenerateName(request.ImageFile, Directories.SliderImages);
 
-        slider.Edit(request.Title, request.Link, imageName);
+        slider.Edit(request.Title, request.Link, imageName, request.Description, request.IsActive, request.Order, request.AltText);
 
         await _repository.Save();
         DeleteOldImage(request.ImageFile, oldImage);

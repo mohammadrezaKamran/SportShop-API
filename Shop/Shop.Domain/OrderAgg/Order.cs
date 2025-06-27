@@ -122,12 +122,13 @@ namespace Shop.Domain.OrderAgg
         {
             if (!Items.Any())
                 throw new InvalidDomainDataException("سفارشی بدون آیتم نمی‌تواند ثبت نهایی شود");
+        
+			GenerateOrderNumber(TextForInvoice);
 
-            Status = OrderStatus.Finally;
+			Status = OrderStatus.Finally;
 			UpdateLastModified();
 
-			GenerateOrderNumber(TextForInvoice);
-            AddDomainEvent(new OrderFinalized(Id));
+			AddDomainEvent(new OrderFinalized(Id));
         }
 		public void ChangeStatus(OrderStatus status)
 		{
@@ -164,7 +165,7 @@ namespace Shop.Domain.OrderAgg
 			if (OrderNumber != null)
 				throw new NullOrEmptyDomainDataException("شماره فاکتور قبلا ثبت شده");
 
-			OrderNumber = TextForInvoice.Trim() + TextHelper.GenerateCode(5);
+			OrderNumber = $"{TextForInvoice.Trim()}-{TextHelper.GenerateCode(5)}";
 
 		}
 		public void SetTrackingNumber(string trackingNumber)

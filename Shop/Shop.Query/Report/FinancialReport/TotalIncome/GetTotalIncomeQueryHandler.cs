@@ -21,16 +21,40 @@ namespace Shop.Query.Report.FinancialReport.TotalIncome
 
         public async Task<IncomeReportDto> Handle(GetTotalIncomeQuery request, CancellationToken cancellationToken)
         {
-            var orders = await _context.Orders
-                  .Where(o => o.Status == OrderStatus.Finally).ToListAsync(cancellationToken);
+           var now = DateTime.UtcNow;
 
-            var total = orders.Sum(o => o.TotalPrice);
+            var orders = await _context.Orders.AsNoTracking()
+                .Where(o => o.Status == OrderStatus.Finally)
+                .ToListAsync(cancellationToken);
 
-            return new IncomeReportDto
+            var totalIncome = orders.Sum(o => o.TotalPrice);
+
+            var dailyIncome = orders
+                .Where(o => o.CreationDate.Date == now.Date)
+                .Sum(o => o.TotalPrice);
+
+            var monthlyIncome = orders
+                .Where(o => o.CreationDate.Year == now.Year && o.CreationDate.Month == now.Month)
+                .Sum(o => o.TotalPrice);
+
+            var sixMonthAgo = now.AddMonths(-5); 
+            var sixMonthlyIncome = orders
+                .Where(o => o.CreationDate >= new DateTime(sixMonthAgo.Year, sixMonthAgo.Month, 1))
+                .Sum(o => o.TotalPrice);
+
+            return new IncomeReportDto()
             {
-                TotalIncome = total,
-                TotalOrders = orders.Count
+                TotalIncome = totalIncome,
+                DailyIncome = dailyIncome,
+                MonthlyIncome = monthlyIncome,
+                SixMonthlyIncome = sixMonthlyIncome
             };
-        }
+                
+               
+        }        
+
     }
+
 }
+
+

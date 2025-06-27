@@ -9,7 +9,8 @@ public class ProductDto : BaseDto
 {
     public string Title { get; set; }
     public string ImageName { get; set; }
-    public string Description { get; set; }
+	public string AltText { get; set; }
+	public string Description { get; set; }
     public string BrandName { get; set; }
     public bool IsSpecial {  get; set; }
     public ProductCategoryDto Category { get; set; }

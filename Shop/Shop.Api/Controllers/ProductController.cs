@@ -14,6 +14,7 @@ using Shop.Application.Products.ProductVariant.RemoveProductVariant;
 using Shop.Application.Products.ProductVariantStatusCommand;
 using Shop.Application.Products.RemoveImage;
 using Shop.Application.Products.Special;
+using Shop.Domain.ProductAgg;
 using Shop.Domain.RoleAgg.Enums;
 using Shop.Presentation.Facade.Orders;
 using Shop.Presentation.Facade.Products;
@@ -22,7 +23,7 @@ using System.Drawing;
 
 namespace Shop.Api.Controllers;
 
-//[PermissionChecker(Permission.CRUD_Product)]
+[PermissionChecker(Permission.CRUD_Product)]
 public class ProductController : ApiController
 {
     private readonly IProductFacade _productFacade;
@@ -43,6 +44,13 @@ public class ProductController : ApiController
     public async Task<ApiResult<ProductShopResult>> GetProductForShopFilter([FromQuery] ProductShopFilterParam filterParams)
     {
         return QueryResult(await _productFacade.GetProductForShop(filterParams));
+    }
+
+    [AllowAnonymous]
+    [HttpGet("Category")]
+    public async Task<ApiResult<ProductCategoryResult>> GetProductsForCategoryFilter([FromQuery] ProductCategoryFilterParam filterParams)
+    {
+		return QueryResult(await _productFacade.GetProductsForCategory(filterParams));
     }
 
     [AllowAnonymous]
@@ -85,6 +93,7 @@ public class ProductController : ApiController
             SubCategoryId = command.SubCategoryId,
             Title = command.Title,
             Status = command.Status,
+            AltText = command.AltText,
         });
         return CommandResult(result);
     }
@@ -106,7 +115,7 @@ public class ProductController : ApiController
         return CommandResult(result);
     }
 
-	[HttpPost("Product/Special")]
+	[HttpPost("ProductSpecial")]
 	public async Task<ApiResult> SetProductSpecial(SetProductSpecialCommand command)
 	{
         var result = await _productFacade.SetProductSpecial(new SetProductSpecialCommand()
@@ -172,8 +181,16 @@ public class ProductController : ApiController
     {
         var result = await _productFacade.EditProduct(new EditProductCommand(command.ProductId, command.Title, command.ImageFile,
             command.Description, command.CategoryId, command.SubCategoryId, command.Status, command.SecondarySubCategoryId, command.Slug, command.SeoData.Map(),
-            command.BrandName, command.GetSpecification()));
+            command.BrandName, command.GetSpecification(),command.AltText));
 
         return CommandResult(result);
     }
+
+	[AllowAnonymous]
+	[HttpGet("FilterDetails")]
+    public async Task<ApiResult<FilterDetailsDto>> GetFilterDetails()
+    {
+        var result = await _productFacade.GetFilterDetails();
+		return QueryResult(result);
+	}
 }

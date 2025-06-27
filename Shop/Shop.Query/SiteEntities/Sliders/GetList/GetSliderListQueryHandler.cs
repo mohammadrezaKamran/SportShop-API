@@ -23,7 +23,11 @@ public class GetSliderListQueryHandler : IQueryHandler<GetSliderListQuery, List<
                 CreationDate = slider.CreationDate,
                 ImageName = slider.ImageName,
                 Link = slider.Link,
-                Title = slider.Title
-            }).ToListAsync(cancellationToken);
+                Title = slider.Title,
+				Description = slider.Description,
+				Order = slider.Order,
+				AltText = slider.AltText,
+				IsActive = slider.IsActive,
+			}).ToListAsync(cancellationToken);
     }
 }

@@ -27,10 +27,11 @@ namespace Shop.Query.Report.ProductReport.GetOutofStuckProduct
             return await _context.Products
                   .Include(p => p.ProductVariants)
                   .SelectMany(p => p.ProductVariants
-                      .Where(v => v.StockQuantity <= 0)
+                      .Where(v => v.StockQuantity <= 3)
                       .Select(v => new OutOfStockProductDto
                       {
                           ProductId = p.Id,
+                          ImageName = p.ImageName,
                           Title = p.Title,
                           Slug = p.Slug,
                           SKU = v.SKU,

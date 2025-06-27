@@ -22,16 +22,22 @@ namespace Shop.Query.Report.UserReport.GetLatestComment
 
         public async Task<List<LatestCommentDto>> Handle(GetLatestCommentQuery request, CancellationToken cancellationToken)
         {
-            return await _context.Comments
-            .OrderByDescending(c => c.CreationDate)
-            .Take(10)
-            .Select(c => new LatestCommentDto
-            {
-                Id = c.Id,
-                ProductId = c.ProductId,
-                Comment = c.Text,
-                CreationDate = c.CreationDate
-            }).ToListAsync(cancellationToken);
+            var query = await (
+                 from comment in _context.Comments
+                 join product in _context.Products on comment.ProductId equals product.Id
+                 join user in _context.Users on comment.UserId equals user.Id
+                 orderby comment.CreationDate descending
+                 select new LatestCommentDto
+                 {
+                     Id = comment.Id,
+                     Comment = comment.Text,
+                     CreationDate = comment.CreationDate,
+                     ProductTitle = product.Title,
+                     ImageName = product.ImageName,
+                     UserName = user.Name
+                 }).Take(10).ToListAsync(cancellationToken);
+
+            return query;
         }
     }
 }

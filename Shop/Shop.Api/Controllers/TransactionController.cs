@@ -48,7 +48,7 @@ namespace Shop.Api.Controllers
         }
 
         [HttpGet]
-        public async Task<IActionResult> Verify(long orderId, long trackId, int success, string errorRedirect, string successRedirect , string textForInvoice)
+        public async Task<IActionResult> Verify(long orderId, long trackId, int success, string errorRedirect, string successRedirect)
         {
             if (success == 0)
                 return Redirect(errorRedirect);
@@ -68,7 +68,7 @@ namespace Shop.Api.Controllers
             if (result.Amount != order.TotalPrice)
                 return Redirect(errorRedirect);
 
-            var commandResult = await _orderFacade.FinallyOrder(new OrderFinallyCommand(orderId , textForInvoice));
+            var commandResult = await _orderFacade.FinallyOrder(new OrderFinallyCommand(orderId));
 
             if (commandResult.Status == OperationResultStatus.Success)
                 return Redirect(successRedirect);

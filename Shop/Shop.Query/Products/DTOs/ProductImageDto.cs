@@ -7,4 +7,5 @@ public class ProductImageDto : BaseDto
     public long ProductId { get; set; }
     public string ImageName { get; set; }
     public int Sequence { get; set; }
+	public string AltText { get; set; }
 }

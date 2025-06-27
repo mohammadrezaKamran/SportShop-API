@@ -1,5 +1,6 @@
 ﻿using Common.Domain;
 using Common.Domain.Exceptions;
+using Shop.Domain.OrderAgg;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -14,28 +15,47 @@ namespace Shop.Domain.SiteEntities
         public string Link { get; private set; }
         public string ImageName { get; private set; }
 
-        public Slider(string title, string link, string imageName)
+		public string? Description { get; private set; }
+		public bool IsActive { get; private set; }=false;
+		public int Order { get; private set; }
+		public string AltText { get; private set; }
+
+
+		public Slider(string title, string link, string imageName, string? description, bool isActive, int order, string altText)
+		{
+			Guard(title, link, imageName , altText , order);
+
+			Title = title;
+			Link = link;
+			ImageName = imageName;
+			Description = description;
+			IsActive = isActive;
+			Order = order;
+			AltText = altText;
+		}
+
+		public void Edit(string title, string link, string imageName, string? description, bool isActive, int order, string altText)
         {
-            Guard(title, link, imageName);
+			Guard(title, link, imageName, altText, order);
+			Title = title;
+			Link = link;
+			ImageName = imageName;
+			Description = description;
+			IsActive = isActive;
+			Order = order;
+			AltText = altText;
+		}
 
-            Title = title;
-            Link = link;
-            ImageName = imageName;
-        }
-
-        public void Edit(string title, string link, string imageName)
-        {
-            Guard(title, link, imageName);
-            Title = title;
-            Link = link;
-            ImageName = imageName;
-        }
-
-        public void Guard(string title, string link, string imageName)
+        public void Guard(string title, string link, string imageName ,string altText ,int order)
         {
             NullOrEmptyDomainDataException.CheckString(link, nameof(link));
             NullOrEmptyDomainDataException.CheckString(imageName, nameof(imageName));
             NullOrEmptyDomainDataException.CheckString(title, nameof(title));
-        }
+			NullOrEmptyDomainDataException.CheckString(altText, nameof(altText));
+			if (order <= 0 || order > 30)
+			{
+				throw new InvalidDomainDataException("اولویت تایین نشده است");
+			}
+		}
     }
 }

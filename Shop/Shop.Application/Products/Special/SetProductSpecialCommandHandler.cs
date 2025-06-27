@@ -13,7 +13,7 @@ public class SetProductSpecialCommandHandler : IBaseCommandHandler<SetProductSpe
 
 	public async Task<OperationResult> Handle(SetProductSpecialCommand request, CancellationToken cancellationToken)
 	{
-		var product = await _productRepository.GetAsync(request.ProductId);
+		var product = await _productRepository.GetTracking(request.ProductId);
 
 		if (product == null)
 			return OperationResult.NotFound();
